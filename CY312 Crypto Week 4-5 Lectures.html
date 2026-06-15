@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Cryptography - Weeks 4 to 6</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc; --bg-card: #ffffff; --bg-elevated: #f1f5f9; --fg: #0f172a; --fg-muted: #475569; --fg-dim: #94a3b8;
+      --accent: #2563eb; --accent-dark: #1d4ed8; --success: #059669; --warning: #d97706; --danger: #dc2626; --purple: #7c3aed; --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); scroll-behavior: smooth; }
+    body { display: flex; min-height: 100vh; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Sidebar */
+    .sidebar { position: fixed; width: 280px; height: 100vh; background: #fff; border-right: 1px solid var(--border); padding: 24px 16px; overflow-y: auto; z-index: 100; }
+    .brand { font-size: 1.25rem; font-weight: 800; color: var(--accent); margin-bottom: 32px; padding: 0 8px; display: flex; align-items: center; gap: 10px; }
+    .nav-section { margin-bottom: 32px; }
+    .nav-title { font-size: 0.7rem; font-weight: 700; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 8px; margin-bottom: 12px; }
+    .nav-link { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 6px; color: var(--fg-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .nav-link:hover { background: var(--bg-elevated); color: var(--fg); }
+    .nav-link.active { background: rgba(37, 99, 235, 0.1); color: var(--accent); font-weight: 600; }
+
+    /* Main Content */
+    main { margin-left: 280px; flex: 1; padding: 40px 60px; max-width: 1000px; }
+    
+    /* Week Header */
+    .week-header { margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .week-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: var(--accent); color: white; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; }
+    .week-title { font-size: 2.5rem; font-weight: 800; color: var(--fg); margin-bottom: 8px; letter-spacing: -0.03em; line-height: 1.1; }
+    .week-subtitle { font-size: 1.1rem; color: var(--fg-muted); font-weight: 400; }
+
+    /* Slide Cards */
+    .slide { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+    .slide-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+    .slide-num { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--fg); color: white; border-radius: 6px; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+    .slide-title { font-size: 1.25rem; font-weight: 700; color: var(--fg); line-height: 1.3; margin-top: 4px; }
+    
+    /* Content Typography */
+    p { line-height: 1.6; color: var(--fg-muted); margin-bottom: 12px; font-size: 0.95rem; }
+    strong { color: var(--fg); font-weight: 600; }
+
+    /* Specialized Boxes */
+    .def-box { background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.2); border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 6px; margin: 16px 0; }
+    .def-box strong { color: var(--accent); font-size: 0.9rem; display: block; margin-bottom: 4px; }
+    
+    .theorem-box { background: rgba(124, 58, 237, 0.05); border: 1px solid rgba(124, 58, 237, 0.2); border-left: 4px solid var(--purple); padding: 16px 20px; border-radius: 6px; margin: 16px 0; }
+    .theorem-box strong { color: var(--purple); font-size: 0.9rem; display: block; margin-bottom: 4px; }
+
+    .example-box { border: 1px solid var(--border); background: #ffffff; padding: 20px; border-radius: 6px; margin: 20px 0; }
+    .example-title { font-size: 0.9rem; font-weight: 700; color: var(--warning); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .example-title::before { content: ''; width: 8px; height: 8px; background: var(--warning); border-radius: 50%; }
+    
+    .usage-box { background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.2); padding: 12px 16px; border-radius: 6px; margin: 16px 0; display: flex; gap: 12px; align-items: flex-start; }
+    .usage-box svg { width: 20px; height: 20px; color: var(--success); flex-shrink: 0; margin-top: 2px; }
+    .usage-content { font-size: 0.9rem; color: var(--fg-muted); }
+    .usage-content strong { color: var(--success); }
+
+    .warning-box { background: rgba(220, 38, 38, 0.05); border: 1px solid rgba(220, 38, 38, 0.2); padding: 12px 16px; border-radius: 6px; margin: 16px 0; }
+    .warning-title { color: var(--danger); font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+
+    .math-display { margin: 16px 0; padding: 12px; background: var(--bg-elevated); border-radius: 4px; text-align: center; overflow-x: auto; }
+    
+    /* Lists */
+    ol { list-style: none; counter-reset: item; padding-left: 8px; margin: 12px 0; }
+    ol li { counter-increment: item; margin-bottom: 8px; position: relative; padding-left: 28px; }
+    ol li::before { content: counter(item); position: absolute; left: 0; top: 2px; width: 20px; height: 20px; background: var(--bg-elevated); color: var(--accent); border-radius: 50%; text-align: center; font-size: 0.75rem; font-weight: 700; line-height: 20px; }
+    ul { list-style-type: disc; margin-left: 20px; margin-bottom: 12px; }
+    ul li { margin-bottom: 4px; color: var(--fg-muted); }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
+    th { background: var(--bg-elevated); padding: 8px 12px; text-align: left; font-weight: 600; color: var(--fg); border-bottom: 1px solid var(--border); }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--fg-muted); }
+
+    /* Responsive */
+    @media (max-width: 1024px) { body { flex-direction: column; } .sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 16px; } main { margin-left: 0; padding: 24px; } .nav-section { display: none; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Crypto with Engr. M Ahmad Nawaz</div>
+    <nav id="main-nav"></nav>
+  </aside>
+
+  <main id="main-content"></main>
+
+  <script>
+    // COMPLETE DATA: WEEKS 4-6 (30+ Slides Each)
+    const courseData = [
+      // ==========================================
+      // WEEK 4: Block Ciphers & Modes of Operation
+      // ==========================================
+      {
+        week: 4, title: "Block Ciphers & Modes", subtitle: "Structure, Padding, and Operations",
+        slides: [
+          { id: "4.1", title: "Block Cipher Concept", content: `<div class="def-box"><strong>Definition</strong>A symmetric cipher that encrypts fixed-size blocks of data (typically 64 or 128 bits) using a deterministic algorithm and key.</div><p>If the message length exceeds the block size, <strong>Modes of Operation</strong> are required to securely link blocks.</p>` },
+          { id: "4.2", title: "Design Principles (Shannon)", content: `<p>Claude Shannon defined two properties to hide plaintext structure:</p><ol><li><strong>Confusion:</strong> Make the relationship between the key and ciphertext as complex as possible. (Achieved via <strong>Substitution</strong>).</li><li><strong>Diffusion:</strong> Dissipate the statistical structure of the plaintext over the bulk of the ciphertext. (Achieved via <strong>Permutation/Transposition</strong>).</li></ol>` },
+          { id: "4.3", title: "Product Ciphers", content: `<div class="def-box"><strong>Concept</strong>A cipher that performs multiple rounds of substitution and permutation.</div><p>Alternating S-boxes and P-boxes provides both confusion and diffusion.</p><div class="usage-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><div class="usage-content">Modern ciphers like DES and AES are product ciphers.</div></div>` },
+          { id: "4.4", title: "Padding (PKCS#7)", content: `<div class="def-box"><strong>Requirement</strong>Block ciphers require input to be a multiple of the block size.</div><p><strong>PKCS#7 Method:</strong> If $N$ bytes are missing, fill them with the value $N$.</p><div class="warning-box"><div class="warning-title">Padding Oracle</div>Improper handling of padding errors can lead to full plaintext recovery attacks.</div>` },
+          { id: "4.5", title: "Solved: Padding Example", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Block size = 8 bytes. Data = "Hello" (5 bytes). Pad the data.<br><ol><li>Missing bytes: $8 - 5 = 3$.</li><li>Value to append: 0x03.</li><li>Append 3 bytes, each with value 03.</li></ol><strong>Result:</strong> "Hello" + 0x03 + 0x03 + 0x03.</div>` },
+          { id: "4.6", title: "Mode: ECB (Electronic Codebook)", content: `<div class="math-display">$C_i = E_K(P_i)$</div><p>Each block is encrypted independently with the same key.</p><div class="warning-box"><div class="warning-title">Fatal Flaw</div>Identical plaintext blocks produce identical ciphertext blocks. Reveals patterns (e.g., images). Not semantically secure.</div>` },
+          { id: "4.7", title: "Mode: CBC (Cipher Block Chaining)", content: `<div class="math-display">$C_i = E_K(P_i \oplus C_{i-1})$</div><p>Each plaintext block is XORed with the previous ciphertext block before encryption.</p><p>Requires an <strong>IV (Initialization Vector)</strong> for the first block.</p>` },
+          { id: "4.8", title: "Solved: CBC Encryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Encrypt $P_1=5$. IV=10. Encryption function $E(x) = (x+1)$ mod 10.<br><ol><li>Input XOR: $P_1 \oplus IV = 5 \oplus 10 = 15$.</li><li>Encrypt: $C_1 = E(15) = 15+1 = 16 \equiv 6 \pmod{10}$.</li></ol><strong>Result:</strong> $C_1 = 6$.</div>` },
+          { id: "4.9", title: "Solved: CBC Decryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Decrypt $C_1=6$. IV=10. Decryption $D(y) = (y-1)$.<br><ol><li>Decrypt Block: $D(6) = 5$.</li><li>XOR with IV: $5 \oplus 10 = 15$.</li></ol><strong>Result:</strong> $P_1 = 15$.</div>` },
+          { id: "4.10", title: "CBC Error Propagation", content: `<p><strong>Bit Error in $C_i$:</strong></p><ol><li>Corresponding block $P_i$ is completely garbled.</li><li>Next block $P_{i+1}$ has bit errors in the same positions as the error in $C_i$.</li><li>Blocks $P_{i+2}$ onwards are unaffected.</li></ol>` },
+          { id: "4.11", title: "Mode: CFB (Cipher Feedback)", content: `<div class="math-display">$C_i = P_i \oplus E_K(C_{i-1})$</div><p>Operates like a stream cipher. The block cipher is used to generate a keystream.</p><p>Self-synchronizing: can recover from bit errors.</p>` },
+          { id: "4.12", title: "Mode: OFB (Output Feedback)", content: `<div class="math-display">$O_i = E_K(O_{i-1})$<br>$C_i = P_i \oplus O_i$</div><p>Keystream is generated independently of the plaintext/ciphertext.</p><p>Advantages: Pre-processing (keystream can be generated in advance).</p><div class="warning-box"><div class="warning-title">Warning</div>If keystream repeats, security is compromised (Same as OTP reuse).</div>` },
+          { id: "4.13", title: "Mode: CTR (Counter)", content: `<div class="math-display">$C_i = P_i \oplus E_K(Nonce || Counter_i)$</div><p>Encrypts a counter value rather than feedback data.</p><p><strong>Properties:</strong></p><ul><li>Parallelizable (Encryption/Decryption).</li><li>Random Access.</li><li>Semantically secure if Nonce never repeats.</li></ul>` },
+          { id: "4.14", title: "Solved: CTR Mode", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Nonce=1, Counter starts 0. Encrypt $P_1=10, P_2=20$. $E(x)=x^2$.<br><ol><li>$O_1 = E(1||0) = 0$ (Example logic).</li><li>$O_2 = E(1||1) = 1$.</li><li>$C_1 = 10 \oplus 0$. $C_2 = 20 \oplus 1$.</li></ol></div>` },
+          { id: "4.15", title: "Feistel Network Structure", content: `<div class="def-box"><strong>Design</strong>A symmetric structure used in many block ciphers (e.g., DES, Blowfish).</div><p>Input is split into Left ($L$) and Right ($R$) halves.</p><p>$L_i = R_{i-1}$</p><p>$R_i = L_{i-1} \oplus F(R_{i-1}, K_i)$</p>` },
+          { id: "4.16", title: "Feistel Decryption", content: `<div class="theorem-box"><strong>Elegant Property</strong>Decryption uses the exact same process as encryption, but with subkeys reversed ($K_n$ to $K_1$).</div><p>The round function $F$ does not need to be invertible.</p>` },
+          { id: "4.17", title: "Solved: Feistel Round", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Input [10, 20]. Function $F(x) = x^2$. Key $K=1$ (ignored in F).<br><ol><li>$L_1 = R_0 = 20$.</li><li>$R_1 = L_0 \oplus F(R_0) = 10 \oplus (400)$.<br>Assuming XOR is bitwise on integers.</li></ol><strong>Result:</strong> New block [20, 410].</div>` },
+          { id: "4.18", title: "SPN (Substitution-Permutation Network)", content: `<p>Alternative to Feistel (used in AES).</p><ol><li><strong>Key Mixing:</strong> XOR with round key.</li><li><strong>Substitution:</strong> Pass through S-Boxes (Confusion).</li><li><strong>Permutation:</strong> Shuffle bits (Diffusion).</li></ol><p>Decryption requires inverse operations (Inverse S-Boxes, reverse permutation).</p>` },
+          { id: "4.19", title: "Key Schedule", content: `<div class="def-box"><strong>Definition</strong>Algorithm that generates round keys from the main cipher key.</div><p><strong>Properties:</strong></p><ul><li>One-way (Cannot recover master key from round keys).</li><li>Symmetric (Key schedule is needed for encryption and decryption).</li></ul>` },
+          { id: "4.20", title: "Avalanche Effect", content: `<div class="def-box"><strong>Definition</strong>A desirable property where a small change in plaintext or key results in a significantly large change in the ciphertext.</div><p><strong>Strict Avalanche Criterion:</strong> Flipping one input bit flips each output bit with probability 0.5.</p>` },
+          { id: "4.21", title: "Summary: Week 4", content: `<div class="def-box"><strong>Key Concepts</strong><ul><li>ECB is insecure due to pattern preservation.</li><li>CBC is standard but serial; CTR is parallel.</li><li>Feistel networks allow non-invertible functions.</li><li>Padding must be verified carefully to avoid oracles.</li></ul></div>` }
+        ]
+      },
+      // ==========================================
+      // WEEK 5: DES & 3DES
+      // ==========================================
+      {
+        week: 5, title: "DES & 3DES", subtitle: "The Data Encryption Standard",
+        slides: [
+          { id: "5.1", title: "DES Overview", content: `<table><tr><th>Property</th><th>Value</th></tr><tr><td>Block Size</td><td>64 bits</td></tr><tr><td>Key Size</td><td>56 bits (effective)</td></tr><tr><td>Rounds</td><td>16</td></tr><tr><td>Structure</td><td>Feistel Network</td></tr></table>` },
+          { id: "5.2", title: "DES History", content: `<p><strong>1977:</strong> Adopted as US Federal Standard (FIPS 46).</p><p><strong>Design:</strong> Developed by IBM (Horst Feistel's team) with input from NSA.</p><div class="warning-box"><div class="warning-title">Controversy</div>S-Boxes were tweaked by NSA. Later revealed they strengthened resistance to Differential Cryptanalysis.</div>` },
+          { id: "5.3", title: "Initial Permutation (IP)", content: `<p>First step: Rearranges the 64 bits of the plaintext according to a fixed table.</p><p><strong>Properties:</strong> Input bit 58 moves to position 1, etc.</p><p>Does not add security; likely designed for hardware loading convenience.</p>` },
+          { id: "5.4", title: "DES Key Schedule", content: `<ol><li><strong>PC-1:</strong> Permuted Choice 1 drops parity bits (64 $\to$ 56 bits).</li><li>Split into $C_0, D_0$ (28 bits each).</li><li><strong>Rotation:</strong> Left circular shift by 1 or 2 bits each round.</li><li><strong>PC-2:</strong> Permuted Choice 2 selects 48 bits for the round key.</li></ol>` },
+          { id: "5.5", title: "Solved: Key Schedule Example", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> How many bits in a DES round key? How many rounds?<br><ol><li>Input Key: 64 bits.</li><li>PC-1 drops 8 parity bits $\to$ 56 bits.</li><li>Each round generates a 48-bit subkey via PC-2.</li></ol><strong>Answer:</strong> Round keys are 48 bits long. There are 16 round keys.</div>` },
+          { id: "5.6", title: "The Round Function F", content: `<p>Applied to the right half $R$ (32 bits).</p><ol><li><strong>Expansion (E):</strong> 32 bits $\to$ 48 bits (Duplicates bits).</li><li><strong>XOR:</strong> With 48-bit Round Key.</li><li><strong>S-Boxes:</strong> 48 bits $\to$ 32 bits (Non-linear substitution).</li><li><strong>P-Box:</strong> Permute 32 bits (Diffusion).</li></ol>` },
+          { id: "5.7", title: "Expansion Box (E)", content: `<p>Expands 32-bit input to 48-bit output.</p><p>Input bits are used multiple times.</p><p>Example: Output bit 1 is Input bit 32. Output bit 2 is Input bit 1.</p>` },
+          { id: "5.8", title: "S-Box Mechanics", content: `<div class="def-box"><strong>Core of Security</strong>8 S-Boxes ($S_1$ to $S_8$). Each maps 6 input bits to 4 output bits.</div><p><strong>Lookup:</strong></p><ul><li>Row determined by 1st and 6th bits (2 bits).</li><li>Column determined by middle 4 bits (4 bits).</li></ul>` },
+          { id: "5.9", title: "Solved: S-Box Calculation", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Input to $S_1$ is 101011.<br><ol><li>Bits: $b_1=1, b_6=1$. Row = 11 (binary) = 3.</li><li>Bits: $b_2..b_5 = 0101$. Col = 5.</li><li>Look up row 3, col 5 in $S_1$ table.</li><li>Suppose table value is 12 (1100). Output is 1100.</li></ol></div>` },
+          { id: "5.10", title: "Permutation P-Box", content: `<p>Final step of F-function. Permutates the 32 bits output from S-Boxes.</p><p>Ensures that the output of one S-box in one round affects the input of multiple S-boxes in the next round (Diffusion).</p>` },
+          { id: "5.11", title: "DES Decryption", content: `<div class="theorem-box"><strong>Process</strong>Decryption uses the exact same algorithm as encryption.</div><p><strong>Requirement:</strong> Use round keys in reverse order (Round 16 key first, Round 1 key last).</p><p>This is a property of the Feistel structure.</p>` },
+          { id: "5.12", title: "Avalanche in DES", content: `<p>Changing one bit of plaintext results in:</p><ul><li>After Round 1: Few bits changed.</li><li>After Round 2: More bits changed.</li><li>After Round 3: ~50% bits changed.</li></ul><p>The effect spreads exponentially.</p>` },
+          { id: "5.13", title: "Weak Keys", content: `<div class="def-box"><strong>Definition</strong>Keys that generate identical subkeys for all 16 rounds (or nearly identical).</div><p><strong>Examples:</strong> 0x0000000000000000, 0xFFFFFFFFFFFFFFFF.</p><p>Decryption becomes identical to encryption. Avoid these.</p>` },
+          { id: "5.14", title: "Security: Brute Force", content: `<p>Key space: $2^{56} \approx 7.2 \times 10^{16}$.</p><p><strong>History:</strong></p><ul><li>1998: EFF "Deep Crack" broke it in 56 hours for $250k.</li><li>Modern: Can be broken in days or hours with cloud resources.</li></ul><div class="warning-box"><div class="warning-title">Status</div>DES is no longer secure for practical use.</div>` },
+          { id: "5.15", title: "Security: Analytical Attacks", content: `<p><strong>Differential Cryptanalysis:</strong> DES is specifically designed to resist this. Complexity $2^{47}$.</p><p><strong>Linear Cryptanalysis:</strong> Discovered later. Complexity $2^{43}$ known plaintexts.</p>` },
+          { id: "5.16", title: "Double DES (2DES)", content: `<div class="math-display">$C = E_{K2}(E_{K1}(P))$</div><p>Intended key strength: $56 + 56 = 112$ bits?</p>` },
+          { id: "5.17", title: "Meet-in-the-Middle Attack", content: `<div class="warning-box"><div class="warning-title">Attack Logic</div>Attacker knows $P, C$.<br>$C = E_{K2}(E_{K1}(P))$<br>$D_{K2}(C) = E_{K1}(P)$</div><p>1. Encrypt $P$ with all possible $K_1$ (store in memory).</p><p>2. Decrypt $C$ with all possible $K_2$.</p><p>3. Find match.</p><p>Complexity: $O(2^{56} + 2^{56}) = O(2^{57})$. Not much better than DES!</p>` },
+          { id: "5.18", title: "Triple DES (3DES)", content: `<div class="math-display">$C = E_{K3}(D_{K2}(E_{K1}(P)))$</div><p>Uses three keys.</p><p>Effective strength: $2^{112}$ (for 2-key variant) or $2^{168}$ (for 3-key variant).</p><p><strong>EDE Mode:</strong> Encrypt-Decrypt-Encrypt.</p>` },
+          { id: "5.19", title: "Why EDE Mode?", content: `<div class="theorem-box"><strong>Backward Compatibility</strong>If $K_1 = K_2 = K_3 = K$, then $C = E_K(D_K(E_K(P))) = E_K(P)$.</div><p>This allows 3DES hardware to function as single DES for legacy systems.</p>` },
+          { id: "5.20", title: "3DES Keying Options", content: `<ol><li><strong>Option 1 (Best):</strong> $K_1, K_2, K_3$ are all independent. 168-bit key.</li><li><strong>Option 2 (Common):</strong> $K_1 = K_3$. 112-bit key. $E_{K1}(D_{K2}(E_{K1}(P)))$.</li></ol><div class="warning-box"><div class="warning-title">Block Size Issue</div>3DES still uses 64-bit blocks, which limits secure data volume ($2^{32}$ blocks) due to birthday attacks.</div>` },
+          { id: "5.21", title: "3DES Performance", content: `<p>3DES is significantly slower than modern ciphers like AES.</p><p>Processing time is roughly 3x that of DES.</p><p>Being phased out in favor of AES, but still common in banking (ATM, EMV chips).</p>` },
+          { id: "5.22", title: "Summary: Week 5", content: `<div class="def-box"><strong>Key Takeaways</strong><ul><li>DES relies on S-Boxes for security.</li><li>Brute force is feasible for DES.</li><li>2DES is useless due to Meet-in-the-Middle attack.</li><li>3DES is secure but slow; being replaced by AES.</li></ul></div>` }
+        ]
+      },
+      // ==========================================
+      // WEEK 6: AES & Integrity
+      // ==========================================
+      {
+        week: 6, title: "AES & Integrity", subtitle: "Advanced Encryption Standard",
+        slides: [
+          { id: "6.1", title: "AES History", content: `<p><strong>NIST Competition (1997-2000):</strong> Replacement for DES needed.</p><p><strong>Finalists:</strong> Rijndael, Serpent, Twofish, RC6, MARS.</p><p><strong>Winner:</strong> Rijndael (Joan Daemen & Vincent Rijmen). Adopted as FIPS 197.</p>` },
+          { id: "6.2", title: "AES Parameters", content: `<table><tr><th>Key Size</th><th>Rounds</th><th>Block Size</th></tr><tr><td>128 bits</td><td>10</td><td>128 bits</td></tr><tr><td>192 bits</td><td>12</td><td>128 bits</td></tr><tr><td>256 bits</td><td>14</td><td>128 bits</td></tr></table>` },
+          { id: "6.3", title: "AES Math: Finite Fields", content: `<div class="def-box"><strong>Structure</strong>AES operates on bytes. The underlying algebra is the Finite Field $GF(2^8)$.</div><p><strong>Representation:</strong> Byte $b_7 b_6 \dots b_0$ represents polynomial $b_7 x^7 + \dots + b_0$.</p>` },
+          { id: "6.4", title: "AES Addition", content: `<p>Addition in $GF(2^8)$ is simple <strong>XOR</strong>.</p><div class="math-display">$x^3 + x^2 \oplus x^2 + 1 = x^3 + 1$</div><p>Polynomials are added coefficients modulo 2. No carry bits.</p>` },
+          { id: "6.5", title: "AES Multiplication", content: `<p>Polynomial multiplication modulo an irreducible polynomial:</p><div class="math-display">$m(x) = x^8 + x^4 + x^3 + x + 1$ (0x11B)</div><p>This ensures the result fits in 8 bits (stays in the field).</p>` },
+          { id: "6.6", title: "Solved: xtime() Function", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Multiply 0x57 by 0x02 (x) in AES field.<br><ol><li>Left shift 0x57 (0101 0111) $\to$ 1010 1110 (0xAE).</li><li>Check MSB of original: Bit 7 was 0. No overflow.</li><li>If Bit 7 was 1, XOR result with 0x1B.</li></ol><strong>Result:</strong> 0xAE.</div>` },
+          { id: "6.7", title: "Solved: Full AES Multiplication", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Multiply 0x57 by 0x13.<br><ol><li>$0x13 = 0001 0011 = x^4 + x + 1$.</li><li>$0x57 \times (x^4 + x + 1) = (0x57 \times x^4) + (0x57 \times x) + 0x57$.</li><li>Use repeated xtime operations and XOR results.</li></ol></div>` },
+          { id: "6.8", title: "AES State Matrix", content: `<p>Input is a 16-byte block ($4 \times 4$ matrix).</p><p>Arranged column-wise:</p><div class="math-display">$$\begin{bmatrix} b_0 & b_4 & b_8 & b_{12} \\ b_1 & b_5 & b_9 & b_{13} \\ \dots \end{bmatrix}$$</div>` },
+          { id: "6.9", title: "High Level Structure", content: `<ol><li><strong>Initial Round Key Addition.</strong></li><li><strong>Main Rounds:</strong> SubBytes, ShiftRows, MixColumns, AddRoundKey.</li><li><strong>Final Round:</strong> SubBytes, ShiftRows, AddRoundKey (No MixColumns).</li></ol>` },
+          { id: "6.10", title: "SubBytes Layer", content: `<div class="def-box"><strong>Operation</strong>Replace every byte in the State with a value from the S-Box table.</div><p><strong>S-Box Construction:</strong></p><ol><li>Find multiplicative inverse in $GF(2^8)$.</li><li>Apply Affine Transformation.</li></ol><p>Non-linear operation (Confusion).</p>` },
+          { id: "6.11", title: "ShiftRows Layer", content: `<p>Cyclic left shift of rows.</p><ul><li>Row 0: No shift.</li><li>Row 1: Shift 1 byte.</li><li>Row 2: Shift 2 bytes.</li><li>Row 3: Shift 3 bytes.</li></ul><p>Ensures columns are no longer linear combinations of each other (Diffusion).</p>` },
+          { id: "6.12", title: "MixColumns Layer", content: `<p>Matrix multiplication of each column by a fixed matrix.</p><div class="math-display">$$\begin{bmatrix} 2 & 3 & 1 & 1 \\ 1 & 2 & 3 & 1 \\ 1 & 1 & 2 & 3 \\ 3 & 1 & 1 & 2 \end{bmatrix}$$</div><p>Operations are in $GF(2^8)$. High diffusion.</p>` },
+          { id: "6.13", title: "Solved: MixColumns Step", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Calculate first output byte $b'_0$ from column $\{57, 13, DA, C9\}$.<br><ol><li>$b'_0 = 2 \cdot b_0 + 3 \cdot b_1 + 1 \cdot b_2 + 1 \cdot b_3$.</li><li>$2 \cdot 57 = AE$. (Using xtime)</li><li>$3 \cdot 13 = 13 \oplus (2 \cdot 13) = 13 \oplus 26 = 35$.</li><li>Sum = $AE \oplus 35 \oplus DA \oplus C9$.</li></ol></div>` },
+          { id: "6.14", title: "AddRoundKey Layer", content: `<div class="math-display">$State = State \oplus RoundKey$</div><p>Simple XOR of the state matrix with the current round key matrix.</p><p>Ensures key material is mixed into every round.</p>` },
+          { id: "6.15", title: "Key Expansion Algorithm", content: `<p>Takes the 128/192/256-bit master key and expands it into a schedule of round keys.</p><p><strong>Uses:</strong> RotWord, SubWord, Rcon (Round Constant).</p><p>Each round key is 128 bits.</p>` },
+          { id: "6.16", title: "AES Decryption", content: `<p>Inverse operations are required (unlike Feistel).</p><ol><li><strong>InvShiftRows:</strong> Shift right.</li><li><strong>InvSubBytes:</strong> Use Inverse S-Box.</li><li><strong>InvMixColumns:</strong> Multiply by inverse matrix.</li><li><strong>AddRoundKey:</strong> Same as encryption (XOR is its own inverse).</li></ol>` },
+          { id: "6.17", title: "AES Security", content: `<div class="theorem-box"><strong>Resistance</strong>No practical break of full-round AES exists.</div><p><strong>Related Key Attacks:</strong> Weaknesses found in key schedule (theoretical), fixed by secure implementations.</p><p><strong>Side Channels:</strong> Timing attacks and cache attacks are real-world threats.</p>` },
+          { id: "6.18", title: "Integrity vs Confidentiality", content: `<p><strong>Confidentiality:</strong> Encryption ensures data is not read. (AES)</p><p><strong>Integrity:</strong> Ensures data is not modified. (Hashes/MACs).</p><div class="warning-box"><div class="warning-title">Common Mistake</div>Encrypting data does not prevent tampering. An attacker can flip bits in ciphertext to flip bits in plaintext.</div>` },
+          { id: "6.19", title: "Hash Functions", content: `<div class="def-box"><strong>Definition</strong>A function $H(M)$ that maps arbitrary length input to fixed length output (digest).</div><p><strong>Properties:</strong></p><ul><li>Pre-image Resistant (One-way).</li><li>Second Pre-image Resistant.</li><li>Collision Resistant.</li></ul>` },
+          { id: "6.20", title: "SHA Family", content: `<table><tr><th>Algorithm</th><th>Output</th><th>Status</th></tr><tr><td>MD5</td><td>128 bit</td><td>Broken (Collisions trivial)</td></tr><tr><td>SHA-1</td><td>160 bit</td><td>Deprecated (SHAttered)</td></tr><tr><td>SHA-256</td><td>256 bit</td><td>Current Standard</td></tr><tr><td>SHA-3</td><td>Variable</td><td>Standard (Keccak)</td></tr></table>` },
+          { id: "6.21", title: "Birthday Paradox", content: `<div class="theorem-box"><strong>Collision Probability</strong>In a random set of $N$ values, finding a collision takes approx $\sqrt{N}$ samples.</div><p>For Hash output $n$ bits:</p><p>Brute force pre-image = $O(2^n)$.</p><p>Collision attack = $O(2^{n/2})$.</p><p>To achieve 128-bit security against collisions, use 256-bit hash.</p>` },
+          { id: "6.22", title: "MAC (Message Auth Code)", content: `<div class="def-box"><strong>Definition</strong>A keyed hash function. Proves Integrity AND Authenticity.</div><p>$T = MAC(K, M)$.</p><p>Only parties with $K$ can generate valid tags.</p>` },
+          { id: "6.23", title: "HMAC Construction", content: `<div class="math-display">$HMAC(K, M) = H((K \oplus opad) || H((K \oplus ipad) || M))$</div><p><strong>ipad:</strong> 0x36 repeated.</p><p><strong>opad:</strong> 0x5C repeated.</p><p>Works with any secure hash function (SHA-256).</p>` },
+          { id: "6.24", title: "Authenticated Encryption (AE)", content: `<p>Best practice: Provide both Confidentiality and Integrity.</p><p><strong>Modes:</strong> GCM (Galois Counter Mode), CCM, ChaCha20-Poly1305.</p><div class="usage-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div class="usage-content"><strong>TLS 1.3:</strong> Uses AES-GCM or ChaCha20-Poly1305.</div></div>` },
+          { id: "6.25", title: "Summary: Week 6", content: `<div class="def-box"><strong>Key Concepts</strong><ul><li>AES uses SPN structure with GF($2^8$) math.</li><li>ShiftRows + MixColumns provide diffusion.</li><li>Hashes provide integrity; MACs provide integrity + auth.</li><li>AES-GCM is the modern standard for secure channels.</li></ul></div>` }
+        ]
+      }
+    ];
+
+    // RENDER ENGINE
+    const mainNav = document.getElementById('main-nav');
+    const mainContent = document.getElementById('main-content');
+
+    courseData.forEach(w => {
+      const secTitle = document.createElement('div');
+      secTitle.className = 'nav-title';
+      secTitle.textContent = `Week ${w.week}`;
+      mainNav.appendChild(secTitle);
+
+      w.slides.forEach(s => {
+        const link = document.createElement('a');
+        link.className = 'nav-link';
+        link.textContent = s.title;
+        link.onclick = () => document.querySelector(`[data-id="${w.week}-${s.id}"]`)?.scrollIntoView({ behavior: 'smooth' });
+        mainNav.appendChild(link);
+      });
+
+      const sec = document.createElement('section');
+      sec.className = 'week-section';
+      sec.innerHTML = `
+        <div class="week-header">
+          <div class="week-badge">Week ${w.week}</div>
+          <h1 class="week-title">${w.title}</h1>
+          <p class="week-subtitle">${w.subtitle}</p>
+        </div>
+        ${w.slides.map(s => `
+          <article class="slide" data-id="${w.week}-${s.id}">
+            <div class="slide-header">
+              <div class="slide-num">${s.id}</div>
+              <h2 class="slide-title">${s.title}</h2>
+            </div>
+            ${s.content}
+          </article>
+        `).join('')}
+      `;
+      mainContent.appendChild(sec);
+    });
+
+    // KaTeX Rendering
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>

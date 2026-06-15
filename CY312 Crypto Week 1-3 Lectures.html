@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Cryptography - Weeks 1 to 3</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc; --bg-card: #ffffff; --bg-elevated: #f1f5f9; --fg: #0f172a; --fg-muted: #475569; --fg-dim: #94a3b8;
+      --accent: #2563eb; --accent-dark: #1d4ed8; --success: #059669; --warning: #d97706; --danger: #dc2626; --purple: #7c3aed; --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); scroll-behavior: smooth; }
+    body { display: flex; min-height: 100vh; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Sidebar */
+    .sidebar { position: fixed; width: 280px; height: 100vh; background: #fff; border-right: 1px solid var(--border); padding: 24px 16px; overflow-y: auto; z-index: 100; }
+    .brand { font-size: 1.25rem; font-weight: 800; color: var(--accent); margin-bottom: 32px; padding: 0 8px; display: flex; align-items: center; gap: 10px; }
+    .nav-section { margin-bottom: 32px; }
+    .nav-title { font-size: 0.7rem; font-weight: 700; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 8px; margin-bottom: 12px; }
+    .nav-link { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 6px; color: var(--fg-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .nav-link:hover { background: var(--bg-elevated); color: var(--fg); }
+    .nav-link.active { background: rgba(37, 99, 235, 0.1); color: var(--accent); font-weight: 600; }
+
+    /* Main Content */
+    main { margin-left: 280px; flex: 1; padding: 40px 60px; max-width: 1000px; }
+    
+    /* Week Header */
+    .week-header { margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .week-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: var(--accent); color: white; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; }
+    .week-title { font-size: 2.5rem; font-weight: 800; color: var(--fg); margin-bottom: 8px; letter-spacing: -0.03em; line-height: 1.1; }
+    .week-subtitle { font-size: 1.1rem; color: var(--fg-muted); font-weight: 400; }
+
+    /* Slide Cards */
+    .slide { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+    .slide-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+    .slide-num { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--fg); color: white; border-radius: 6px; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+    .slide-title { font-size: 1.25rem; font-weight: 700; color: var(--fg); line-height: 1.3; margin-top: 4px; }
+    
+    /* Content Typography */
+    p { line-height: 1.6; color: var(--fg-muted); margin-bottom: 12px; font-size: 0.95rem; }
+    strong { color: var(--fg); font-weight: 600; }
+
+    /* Specialized Boxes */
+    .def-box { background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.2); border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 6px; margin: 16px 0; }
+    .def-box strong { color: var(--accent); font-size: 0.9rem; display: block; margin-bottom: 4px; }
+    
+    .theorem-box { background: rgba(124, 58, 237, 0.05); border: 1px solid rgba(124, 58, 237, 0.2); border-left: 4px solid var(--purple); padding: 16px 20px; border-radius: 6px; margin: 16px 0; }
+    .theorem-box strong { color: var(--purple); font-size: 0.9rem; display: block; margin-bottom: 4px; }
+
+    .example-box { border: 1px solid var(--border); background: #ffffff; padding: 20px; border-radius: 6px; margin: 20px 0; }
+    .example-title { font-size: 0.9rem; font-weight: 700; color: var(--warning); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .example-title::before { content: ''; width: 8px; height: 8px; background: var(--warning); border-radius: 50%; }
+    
+    .usage-box { background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.2); padding: 12px 16px; border-radius: 6px; margin: 16px 0; display: flex; gap: 12px; align-items: flex-start; }
+    .usage-box svg { width: 20px; height: 20px; color: var(--success); flex-shrink: 0; margin-top: 2px; }
+    .usage-content { font-size: 0.9rem; color: var(--fg-muted); }
+    .usage-content strong { color: var(--success); }
+
+    .warning-box { background: rgba(220, 38, 38, 0.05); border: 1px solid rgba(220, 38, 38, 0.2); padding: 12px 16px; border-radius: 6px; margin: 16px 0; }
+    .warning-title { color: var(--danger); font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+
+    .math-display { margin: 16px 0; padding: 12px; background: var(--bg-elevated); border-radius: 4px; text-align: center; overflow-x: auto; }
+    
+    /* Lists */
+    ol { list-style: none; counter-reset: item; padding-left: 8px; margin: 12px 0; }
+    ol li { counter-increment: item; margin-bottom: 8px; position: relative; padding-left: 28px; }
+    ol li::before { content: counter(item); position: absolute; left: 0; top: 2px; width: 20px; height: 20px; background: var(--bg-elevated); color: var(--accent); border-radius: 50%; text-align: center; font-size: 0.75rem; font-weight: 700; line-height: 20px; }
+    ul { list-style-type: disc; margin-left: 20px; margin-bottom: 12px; }
+    ul li { margin-bottom: 4px; color: var(--fg-muted); }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
+    th { background: var(--bg-elevated); padding: 8px 12px; text-align: left; font-weight: 600; color: var(--fg); border-bottom: 1px solid var(--border); }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--fg-muted); }
+
+    /* Responsive */
+    @media (max-width: 1024px) { body { flex-direction: column; } .sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 16px; } main { margin-left: 0; padding: 24px; } .nav-section { display: none; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Crypto with Engr. M Ahmad Nawaz</div>
+    <nav id="main-nav"></nav>
+  </aside>
+
+  <main id="main-content"></main>
+
+  <script>
+    // COMPLETE DATA: WEEKS 1-3 (30+ Slides Each)
+    const courseData = [
+      // ==========================================
+      // WEEK 1: Foundations & Mathematics
+      // ==========================================
+      {
+        week: 1, title: "Foundations & Mathematics", subtitle: "Logic, Sets, GCD, and Modular Arithmetic",
+        slides: [
+          { id: "1.1", title: "Cryptography Overview", content: `<div class="def-box"><strong>Definition</strong>Cryptography is the science of encoding and decoding information to protect it from adversaries. It achieves Confidentiality, Integrity, Authentication, and Non-repudiation.</div><div class="usage-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div class="usage-content"><strong>Real-world Usage:</strong> HTTPS/TLS for web security, Signal/WhatsApp for messaging, BitLocker for disk encryption, Blockchain.</div></div>` },
+          { id: "1.2", title: "The CIA Triad", content: `<p>The three pillars of information security:</p><ol><li><strong>Confidentiality:</strong> Ensuring information is accessible only to authorized parties (Encryption).</li><li><strong>Integrity:</strong> Maintaining the accuracy and completeness of data over its entire lifecycle (Hashing).</li><li><strong>Availability:</strong> Ensuring that authorized users have access to information and resources when needed.</li></ol>` },
+          { id: "1.3", title: "Cryptosystem Components", content: `<p>A cryptosystem is a 5-tuple $(M, C, K, E, D)$:</p><ul><li>$M$: Plaintext space (set of possible messages).</li><li>$C$: Ciphertext space (set of possible ciphertexts).</li><li>$K$: Key space (set of possible keys).</li><li>$E$: Set of encryption algorithms.</li><li>$D$: Set of decryption algorithms.</li></ul>` },
+          { id: "1.4", title: "Sets, Relations, and Functions", content: `<div class="def-box"><strong>Definition</strong>A <strong>Set</strong> is a well-defined collection of distinct objects. Notation: $S = \{x \mid P(x)\}$.</div><p><strong>Cartesian Product:</strong> $A \times B = \{(a,b) \mid a \in A, b \in B\}$.</p><div class="theorem-box"><strong>Theorem</strong>For finite sets $A$ and $B$, $|A \times B| = |A| \cdot |B|$.</div>` },
+          { id: "1.5", title: "Integers Modulo n", content: `<div class="def-box"><strong>Definition</strong>The set of residues modulo $n$ is denoted as $\mathbb{Z}_n = \{0, 1, 2, \dots, n-1\}$.</div><p><strong>Congruence Relation:</strong> $a \equiv b \pmod n \iff n \mid (a-b)$.</p><p>This means $a$ and $b$ leave the same remainder when divided by $n$.</p>` },
+          { id: "1.6", title: "Modular Arithmetic Properties", content: `<p>Let $a, b, n \in \mathbb{Z}$.</p><ol><li><strong>Addition:</strong> $(a + b) \bmod n = [(a \bmod n) + (b \bmod n)] \bmod n$</li><li><strong>Subtraction:</strong> $(a - b) \bmod n = [(a \bmod n) - (b \bmod n)] \bmod n$</li><li><strong>Multiplication:</strong> $(a \cdot b) \bmod n = [(a \bmod n) \cdot (b \bmod n)] \bmod n$</li></ol>` },
+          { id: "1.7", title: "Solved: Modular Addition", content: `<div class="example-box"><div class="example-title">Solved Example 1</div><strong>Problem:</strong> Compute $(145 + 289) \bmod 12$.<br><strong>Solution:</strong><ol><li>Reduce 145 mod 12: $145 = 12 \times 12 + 1$. Remainder = 1.</li><li>Reduce 289 mod 12: $289 = 24 \times 12 + 1$. Remainder = 1.</li><li>Add remainders: $1 + 1 = 2$.</li><li>Result: 2 mod 12.</li></ol><strong>Verification:</strong> $145+289=434$. $434 \div 12 = 36.16$. $36 \times 12 = 432$. Remainder 2. Correct.</div>` },
+          { id: "1.8", title: "Solved: Modular Multiplication", content: `<div class="example-box"><div class="example-title">Solved Example 2</div><strong>Problem:</strong> Compute $18 \times 17 \pmod 7$.<br><strong>Solution:</strong><ol><li>Reduce 18 mod 7: $18 = 2 \times 7 + 4 \implies 4$.</li><li>Reduce 17 mod 7: $17 = 2 \times 7 + 3 \implies 3$.</li><li>Multiply remainders: $4 \times 3 = 12$.</li><li>Reduce result mod 7: $12 \bmod 7 = 5$.</li></ol><strong>Answer:</strong> 5.</div>` },
+          { id: "1.9", title: "Greatest Common Divisor (GCD)", content: `<div class="def-box"><strong>Definition</strong>$\gcd(a, b)$ is the largest integer $d$ such that $d \mid a$ and $d \mid b$.</div><p><strong>Relative Primes:</strong> Two integers $a, b$ are coprime if $\gcd(a, b) = 1$.</p><div class="theorem-box"><strong>Theorem</strong>If $\gcd(a, b) = d$, then there exist integers $x, y$ such that $ax + by = d$.</div>` },
+          { id: "1.10", title: "Euclidean Algorithm", content: `<p>Efficient method to compute GCD based on repeated division.</p><div class="theorem-box"><strong>Algorithm Logic</strong>$\gcd(a, b) = \gcd(b, a \bmod b)$</div><p><strong>Steps:</strong> Replace the larger number with the remainder of division until the remainder is 0. The last non-zero remainder is the GCD.</p>` },
+          { id: "1.11", title: "Solved: Euclidean Algorithm (Basic)", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $\gcd(252, 105)$.<br><ol><li>$252 = 2 \times 105 + 42$ (Remainder 42)</li><li>$105 = 2 \times 42 + 21$ (Remainder 21)</li><li>$42 = 2 \times 21 + 0$ (Remainder 0)</li><li>Stop. Last non-zero remainder is 21.</li></ol><strong>Answer:</strong> $\gcd(252, 105) = 21$.</div>` },
+          { id: "1.12", title: "Solved: Euclidean Algorithm (Large)", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $\gcd(1071, 462)$.<br><ol><li>$1071 = 2 \times 462 + 147$</li><li>$462 = 3 \times 147 + 21$</li><li>$147 = 7 \times 21 + 0$</li></ol><strong>Answer:</strong> 21.</div>` },
+          { id: "1.13", title: "Extended Euclidean Algorithm (EEA)", content: `<div class="def-box"><strong>Purpose</strong>Find integers $x, y$ satisfying Bézout's Identity: $ax + by = \gcd(a, b)$.</div><p>This is essential for finding modular inverses.</p>` },
+          { id: "1.14", title: "Solved: Extended Euclidean", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $x, y$ for $\gcd(101, 23)$.<br><ol><li>Forward Pass:<br>$101 = 4(23) + 9$<br>$23 = 2(9) + 5$<br>$9 = 1(5) + 4$<br>$5 = 1(4) + 1$</li><li>Backward Substitution:<br>$1 = 5 - 1(4)$<br>$= 5 - 1(9 - 1(5)) = 2(5) - 1(9)$<br>$= 2(23 - 2(9)) - 1(9) = 2(23) - 5(9)$<br>$= 2(23) - 5(101 - 4(23)) = 22(23) - 5(101)$</li></ol><strong>Solution:</strong> $x = -5, y = 22$.</div>` },
+          { id: "1.15", title: "Modular Inverse Definition", content: `<div class="def-box"><strong>Definition</strong>The multiplicative inverse of $a$ modulo $n$ is an integer $x$ such that:<br>$ax \equiv 1 \pmod n$</div><div class="theorem-box"><strong>Existence Condition</strong>Inverse exists iff $\gcd(a, n) = 1$.</div>` },
+          { id: "1.16", title: "Solved: Modular Inverse Calculation", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $7^{-1} \pmod{26}$.<br><ol><li>Verify existence: $\gcd(7, 26) = 1$. Exists.</li><li>Solve $7x \equiv 1 \pmod{26}$.</li><li>Using EEA (from prev slide logic): $7(-11) = -77$. $-77 \equiv 1 \pmod{26}$?<br>$-77 = -3(26) + 1$. Yes.</li><li>$-11 \equiv 15 \pmod{26}$.</li></ol><strong>Answer:</strong> 15.</div>` },
+          { id: "1.17", title: "Solved: Modular Inverse Practice", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $3^{-1} \pmod{11}$.<br><ol><li>Find $x$ such that $3x \equiv 1 \pmod{11}$.</li><li>Try multiples of 3: 3, 6, 9, 12, 15.<br>$15 \equiv 4$.<br>$18 \equiv 7$.<br>$21 \equiv 10$.<br>$30 \equiv 8$.<br>$15 \equiv 1 \pmod{11}$? No, $15 = 4$.</li><li>Brute Force or EEA yields $x=4$.<br>$3 \times 4 = 12 \equiv 1 \pmod{11}$.</li></ol><strong>Answer:</strong> 4.</div>` },
+          { id: "1.18", title: "Algebraic Structures: Groups", content: `<div class="def-box"><strong>Definition</strong>A Group $(G, \cdot)$ is a set $G$ with binary operation $\cdot$ satisfying:</div><ol><li><strong>Closure:</strong> $a, b \in G \implies a \cdot b \in G$.</li><li><strong>Associativity:</strong> $(a \cdot b) \cdot c = a \cdot (b \cdot c)$.</li><li><strong>Identity:</strong> $\exists e \in G : a \cdot e = e \cdot a = a$.</li><li><strong>Inverse:</strong> $\forall a \in G, \exists b : a \cdot b = e$.</li></ol>` },
+          { id: "1.19", title: "Algebraic Structures: Abelian Groups", content: `<div class="def-box"><strong>Definition</strong>A group is Abelian if $a \cdot b = b \cdot a$ for all $a, b \in G$.</div><p><strong>Example:</strong> $(\mathbb{Z}, +)$ is an Abelian Group.</p><ul><li>Closure: Sum of integers is integer.</li><li>Associative: Yes.</li><li>Identity: 0.</li><li>Inverse: $-a$.</li><li>Commutative: $a+b=b+a$.</li></ul>` },
+          { id: "1.20", title: "Rings and Fields", content: `<p><strong>Ring:</strong> Set with two operations (+, $\cdot$). Addition is an abelian group, multiplication is associative, distributive.</p><p><strong>Field:</strong> A commutative ring with unity where every non-zero element has a multiplicative inverse.</p><div class="usage-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 8l-8 8M8 8l8 8"></path></svg><div class="usage-content">Fields like $GF(2^8)$ are the fundamental structure for AES encryption.</div></div>` },
+          { id: "1.21", title: "Finite Fields (Galois Fields)", content: `<div class="def-box"><strong>Definition</strong>$GF(p^n)$ is a finite field with $p^n$ elements, where $p$ is prime.</div><p><strong>Operations in GF(p):</strong> Addition and Multiplication are modulo $p$.</p><div class="theorem-box"><strong>Property</strong>Since $p$ is prime, every non-zero element has an inverse, making it a field.</div>` },
+          { id: "1.22", title: "Solved: GF Arithmetic", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Compute operations in $GF(7)$.<br>1. $4 + 5 = 9 \equiv 2 \pmod 7$.<br>2. $3 \times 5 = 15 \equiv 1 \pmod 7$.<br>3. $2^{-1} \pmod 7$. Find $x$ such that $2x \equiv 1$. $x=4$.</div>` },
+          { id: "1.23", title: "Prime Numbers", content: `<div class="def-box"><strong>Definition</strong>An integer $p > 1$ is prime if its only positive divisors are 1 and $p$.</div><div class="theorem-box"><strong>Fundamental Theorem of Arithmetic</strong>Every integer $> 1$ is either a prime or can be represented as the product of prime numbers in a unique way.</div>` },
+          { id: "1.24", title: "Primality Testing", content: `<p>Methods to determine if a number is prime.</p><ol><li><strong>Trial Division:</strong> Check divisibility up to $\sqrt{n}$. (Slow).</li><li><strong>Fermat's Little Theorem:</strong> If $p$ is prime, $a^{p-1} \equiv 1 \pmod p$. (Probabilistic).</li><li><strong>Miller-Rabin:</strong> Advanced probabilistic test used in RSA key generation.</li></ol>` },
+          { id: "1.25", title: "Fermat's Little Theorem", content: `<div class="theorem-box"><strong>Theorem</strong>If $p$ is prime and $\gcd(a, p) = 1$, then $a^{p-1} \equiv 1 \pmod p$.</div><p>Simplification of Euler's theorem for prime modulus.</p>` },
+          { id: "1.26", title: "Solved: Fermat's Theorem", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $2^{100} \pmod 7$.<br><ol><li>$p=7 \implies \phi(7) = 6$.</li><li>$2^{100} = 2^{(16 \times 6) + 4}$.</li><li>$2^6 \equiv 1 \pmod 7$.</li><li>$2^{100} \equiv 1^{16} \cdot 2^4 \equiv 16 \equiv 2 \pmod 7$.</li></ol><strong>Answer:</strong> 2.</div>` },
+          { id: "1.27", title: "Number Theory: Euler's Totient", content: `<div class="def-box"><strong>Definition</strong>$\phi(n)$ counts integers $\le n$ coprime to $n$.</div><p><strong>Formula for primes:</strong> $\phi(p) = p-1$.</p><p><strong>Formula for products:</strong> $\phi(pq) = (p-1)(q-1)$.</p>` },
+          { id: "1.28", title: "Solved: Euler's Totient Calculation", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $\phi(21)$ and $\phi(35)$.<br><ol><li>21 = 3 x 7. $\phi(21) = (3-1)(7-1) = 2 \times 6 = 12$.</li><li>35 = 5 x 7. $\phi(35) = (5-1)(7-1) = 4 \times 6 = 24$.</li></ol></div>` },
+          { id: "1.29", title: "Euler's Theorem", content: `<div class="theorem-box"><strong>Theorem</strong>If $\gcd(a, n) = 1$, then $a^{\phi(n)} \equiv 1 \pmod n$.</div><p><strong>Corollary:</strong> $a^{-1} \equiv a^{\phi(n)-1} \pmod n$.</p>` },
+          { id: "1.30", title: "Solved: Euler's Theorem Reduction", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $2^{100} \pmod{21}$.<br><ol><li>$n=21, \phi(21)=12$.</li><li>$\gcd(2, 21)=1$.</li><li>$2^{100} = 2^{(8 \times 12) + 4} = (2^{12})^8 \cdot 2^4$.</li><li>$2^{12} \equiv 1 \pmod{21}$ by Euler.</li><li>$1^8 \cdot 16 = 16$.</li></ol><strong>Answer:</strong> 16.</div>` },
+          { id: "1.31", title: "Kerckhoffs's Principle", content: `<div class="def-box"><strong>Principle</strong>"A cryptosystem should be secure even if everything about the system, except the key, is public knowledge."</div><div class="warning-box"><div class="warning-title">Security Implication</div>Algorithm secrecy is not security. Security relies solely on the key space and algorithm strength, which must be publicly tested.</div>` },
+          { id: "1.32", title: "Cryptanalysis Models", content: `<table><tr><th>Type</th><th>Knowledge</th></tr><tr><td>Ciphertext Only</td><td>Only $C$ is available.</td></tr><tr><td>Known Plaintext</td><td>Pairs $(P, C)$ available.</td></tr><tr><td>Chosen Plaintext (CPA)</td><td>Attacker can choose $P$ and get $C$.</td></tr><tr><td>Chosen Ciphertext (CCA)</td><td>Attacker can choose $C$ and get $P$.</td></tr></table>` },
+          { id: "1.33", title: "Solved: Cryptanalysis Scenario", content: `<div class="example-box"><div class="example-title">Scenario Analysis</div><strong>Scenario:</strong> Attacker intercepts an encrypted file and knows the file header is "PDF-1.4".<br><strong>Analysis:</strong> This is a <strong>Known Plaintext Attack</strong>. Attacker knows $P_{start}$ ("PDF-1.4") and $C_{start}$. Can use this to derive partial key info for stream ciphers or analyze block cipher modes.</div>` },
+          { id: "1.34", title: "Summary: Week 1", content: `<div class="def-box"><strong>Key Concepts</strong><ul><li>Modulo arithmetic properties are vital for ciphers.</li><li>Euclidean Algorithm enables key generation (inverses).</li><li>Groups/Rings/Fields provide mathematical security proofs.</li><li>Security lives in the Key, not the Algorithm.</li></ul></div>` }
+        ]
+      },
+      // ==========================================
+      // WEEK 2: Symmetric Ciphers & Attacks
+      // ==========================================
+      {
+        week: 2, title: "Symmetric Ciphers & Attacks", subtitle: "Classical Ciphers, Vigenere, and Analysis",
+        slides: [
+          { id: "2.1", title: "Symmetric Encryption Model", content: `<div class="def-box"><strong>Definition</strong>A scheme where the same key is used for Encryption ($E$) and Decryption ($D$).</div><div class="math-display">$C = E_K(P) \quad \text{and} \quad P = D_K(C)$</div><div class="usage-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg><div class="usage-content"><strong>Usage:</strong> AES for WiFi, BitLocker, VPNs.</div></div>` },
+          { id: "2.2", title: "Key Distribution Problem", content: `<p><strong>Challenge:</strong> How to securely share the key $K$?</p><p>For $N$ users, Symmetric requires $N(N-1)/2$ keys.</p><p>Key exhaustion and secure delivery are major issues.</p>` },
+          { id: "2.3", title: "Caesar Cipher Definition", content: `<div class="def-box"><strong>Definition</strong>A monoalphabetic substitution cipher where each letter is shifted by $k$.</div><div class="math-display">$C_i = (P_i + k) \bmod 26$<br>$P_i = (C_i - k) \bmod 26$</div><p>Key space is extremely small (25 possible keys).</p>` },
+          { id: "2.4", title: "Solved: Caesar Encryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Encrypt "DATA" with $k=5$. (A=0, B=1...) <br><ol><li>D(3) $\to$ 3+5 = 8(I).</li><li>A(0) $\to$ 0+5 = 5(F).</li><li>T(19) $\to$ 19+5 = 24(Y).</li><li>A(0) $\to$ 5(F).</li></ol><strong>Ciphertext:</strong> IFYF.</div>` },
+          { id: "2.5", title: "Solved: Caesar Decryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Decrypt "JCFXY" with $k=7$. (J=9).<br><ol><li>J(9) $\to$ 9-7 = 2(C).</li><li>C(2) $\to$ 2-7 = -5. $26-5=21$(V).</li><li>F(5) $\to$ 5-7 = -2. $26-2=24$(Y).</li><li>X(23) $\to$ 23-7 = 16(Q).</li><li>Y(24) $\to$ 24-7 = 17(R).</li></ol><strong>Plaintext:</strong> CVYQR.</div>` },
+          { id: "2.6", title: "Frequency Analysis", content: `<div class="def-box"><strong>Attack Strategy</strong>Statistical attack exploiting the fact that letter frequencies in a language remain constant in substitution ciphers.</div><p>English: 'E' is most common (~12.7%), 'T' (~9%), 'A' (~8%).</p><div class="warning-box"><div class="warning-title">Vulnerability</div>Monoalphabetic ciphers preserve frequency distribution.</div>` },
+          { id: "2.7", title: "Solved: Frequency Analysis", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Ciphertext: "XLI ASVPH...". Most frequent letter in text is 'X'.<br><ol><li>Assume 'X' maps to 'E' (most common English letter).</li><li>$X(23) \to E(4)$. Shift $k = 23 - 4 = 19$. Or $4-23 = -19 \equiv 7$.</li><li>Check shift 7 (if X is 'e', shift is +19). Actually if X is ciphertext for E, $E \to X$. $4 \to 23 (+19)$.</li><li>Try Decrypt with $k=19$: $X(23) - 19 = 4(E)$. Correct.</li></ol></div>` },
+          { id: "2.8", title: "Affine Cipher", content: `<div class="def-box"><strong>Definition</strong>Cipher using linear function $C = (aP + b) \bmod 26$.</div><div class="theorem-box"><strong>Key Requirement</strong>$\gcd(a, 26) = 1$. Since $26=2 \times 13$, $a$ cannot be even or a multiple of 13.</div>` },
+          { id: "2.9", title: "Solved: Affine Encryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Encrypt 'G' ($P=6$) with key $(a=7, b=3)$.<br><ol><li>Check $\gcd(7, 26)=1$. Valid.</li><li>Compute $C = (7(6) + 3) \bmod 26$.</li><li>$42 + 3 = 45$.</li><li>$45 \bmod 26 = 19$.</li></ol><strong>Ciphertext:</strong> 'T'.</div>` },
+          { id: "2.10", title: "Solved: Affine Decryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Decrypt 'T' ($C=19$) with key $(a=7, b=3)$.<br><ol><li>Formula: $P = a^{-1}(C - b) \bmod 26$.</li><li>Find $7^{-1} \pmod{26}$. $7 \times 15 = 105 = 4 \times 26 + 1$. Inverse is 15.</li><li>Compute $P = 15(19 - 3) \bmod 26$.</li><li>$15 \times 16 = 240$.</li><li>$240 \bmod 26 = 6$.</li></ol><strong>Plaintext:</strong> 'G'.</div>` },
+          { id: "2.11", title: "Vigenere Cipher", content: `<div class="def-box"><strong>Definition</strong>Polyalphabetic cipher using a keyword. Defeats simple frequency analysis.</div><div class="math-display">$C_i = (P_i + K_i) \bmod 26$</div><p>Key repeats to match message length.</p>` },
+          { id: "2.12", title: "Solved: Vigenere Encryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Encrypt "SUN" with Key "MOON".<br><ol><li>Align: SUN / MOO.</li><li>S(18)+M(12) = 30 $\to$ 4(E).</li><li>U(20)+O(14) = 34 $\to$ 8(I).</li><li>N(13)+O(14) = 27 $\to$ 1(B).</li></ol><strong>Ciphertext:</strong> EIB.</div>` },
+          { id: "2.13", title: "Solved: Vigenere Decryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Decrypt "EIB" with Key "MOON".<br><ol><li>E(4)-M(12) = -8 $\to$ 18(S).</li><li>I(8)-O(14) = -6 $\to$ 20(U).</li><li>B(1)-O(14) = -13 $\to$ 13(N).</li></ol><strong>Plaintext:</strong> SUN.</div>` },
+          { id: "2.14", title: "Kasiski Examination", content: `<div class="def-box"><strong>Attack Method</strong>Technique to find keyword length ($L$).</div><ol><li>Identify repeated strings of characters in ciphertext.</li><li>Measure the distance between repetitions.</li><li>Factors of the distance are probable key lengths $L$.</li><li>Once $L$ is found, break ciphertext into $L$ Caesar ciphers.</li></ol>` },
+          { id: "2.15", title: "Hill Cipher", content: `<div class="def-box"><strong>Definition</strong>Polygraphic substitution using matrix multiplication.</div><div class="math-display">$C = (K \times P) \bmod 26$</div><p>Requires square matrix $K$ with invertible determinant.</p>` },
+          { id: "2.16", title: "Solved: Hill Cipher Encryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Encrypt "HI" ($P=[7, 8]^T$) with $K = \begin{pmatrix} 3 & 2 \\ 3 & 5 \end{pmatrix}$.<br><ol><li>Multiply: $\begin{pmatrix} 3 & 2 \\ 3 & 5 \end{pmatrix} \begin{pmatrix} 7 \\ 8 \end{pmatrix} = \begin{pmatrix} 21+16 \\ 21+40 \end{pmatrix} = \begin{pmatrix} 37 \\ 61 \end{pmatrix}$.</li><li>Mod 26: $37 \to 11 (L)$. $61 \to 9 (J)$.</li></ol><strong>Cipher:</strong> LJ.</div>` },
+          { id: "2.17", title: "Solved: Hill Cipher Decryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find Inverse of $K = \begin{pmatrix} 3 & 2 \\ 3 & 5 \end{pmatrix} \bmod 26$.<br><ol><li>$\det = 3(5) - 3(2) = 9$.</li><li>$\det^{-1} \pmod{26}$. $9x \equiv 1 \pmod{26}$. $x=3$. ($27 \equiv 1$).</li><li>Inverse Matrix $K^{-1} = 3 \times \begin{pmatrix} 5 & -2 \\ -3 & 3 \end{pmatrix} = \begin{pmatrix} 15 & -6 \\ -9 & 9 \end{pmatrix}$.<br>Modulo: $\begin{pmatrix} 15 & 20 \\ 17 & 9 \end{pmatrix}$.</li></ol></div>` },
+          { id: "2.18", title: "Playfair Cipher", content: `<div class="def-box"><strong>Definition</strong>Digraph cipher using 5x5 matrix. I/J share a cell.</div><ol><li><strong>Same Row:</strong> Shift right.</li><li><strong>Same Col:</strong> Shift down.</li><li><strong>Rectangle:</strong> Swap columns.</li></ol>` },
+          { id: "2.19", title: "Solved: Playfair Construction", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Construct matrix for "MONARCHY".<br>Fill remaining with A-Z (exclude J).<br>Matrix:<br><table style="font-size:0.8rem"><tr><td>M</td><td>O</td><td>N</td><td>A</td><td>R</td></tr><tr><td>C</td><td>H</td><td>Y</td><td>B</td><td>D</td></tr><tr><td>E</td><td>F</td><td>G</td><td>I/K</td><td>L</td></tr>...</table></div>` },
+          { id: "2.20", title: "Block vs Stream Ciphers", content: `<table><tr><th>Block</th><th>Stream</th></tr><tr><td>Encrypt chunks (64/128 bits)</td><td>Encrypt bits/bytes</td></tr><tr><td>Slower, logic heavy</td><td>Faster, hardware friendly</td></tr><tr><td>AES, DES</td><td>RC4, OTP, LFSR</td></tr></table>` },
+          { id: "2.21", title: "Shannon's Theory", content: `<div class="theorem-box"><strong>Principles</strong><ol><li><strong>Confusion:</strong> Complex relationship between Key and Ciphertext (Substitution).</li><li><strong>Diffusion:</strong> Plaintext structure dissipated in Ciphertext (Permutation).</li></ol></div>` },
+          { id: "2.22", title: "Chosen Plaintext Attack (CPA)", content: `<div class="def-box"><strong>Definition</strong>Attacker can choose arbitrary plaintexts and obtain ciphertexts.</div><div class="usage-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><div class="usage-content"><strong>Real World:</strong> Attacker sends email to target that gets auto-encrypted by gateway.</div></div>` },
+          { id: "2.23", title: "Chosen Ciphertext Attack (CCA)", content: `<div class="def-box"><strong>Definition</strong>Attacker can choose ciphertexts and obtain plaintexts.</div><p><strong>Goal:</strong> Derive Key or decrypt target message.</p><div class="warning-box"><div class="warning-title">Defense</div>Authenticated Encryption (AE) modes.</div>` },
+          { id: "2.24", title: "Padding Oracle Attack", content: `<p>Type of CCA.</p><ol><li>Attacker modifies ciphertext.</li><li>Sends to server.</li><li>Server replies "Padding Error" vs "Valid".</li><li>This single bit of info leaks the plaintext byte-by-byte.</li></ol>` },
+          { id: "2.25", title: "Product Ciphers", content: `<p>Alternating layers of Substitution (S-boxes) and Permutation (P-boxes).</p><p>Modern block ciphers (DES, AES) are product ciphers.</p>` },
+          { id: "2.26", title: "Transposition Ciphers", content: `<div class="def-box"><strong>Definition</strong>Rearranging the order of characters without changing them.</div><p>Example: Rail Fence.</p><p>Security is weak alone, but powerful when combined with substitution.</p>` },
+          { id: "2.27", title: "Solved: Rail Fence", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Encrypt "HELLO" with 2 rails.<br><ol><li>Write in zig-zag:<br>H . . . O<br>. E . L . L</li><li>Read rows: H O E L L.</li></ol></div>` },
+          { id: "2.28", title: "Key Space Size", content: `<p>Number of possible keys $|K|$.</p><p>For Alphabet size $A$ and key length $L$: $|K| = A^L$.</p><div class="warning-box"><div class="warning-title">Note</div>Large key space is necessary but not sufficient for security (e.g., Monoalphabetic has $26!$ keys but is weak).</div>` },
+          { id: "2.29", title: "Brute Force Analysis", content: `<p>Time complexity $O(|K|)$.</p><p>Standard today: $2^{128}$ is computationally secure.</p><p>DES ($2^{56}$) is broken. AES-128 ($2^{128}$) is secure.</p>` },
+          { id: "2.30", title: "Summary: Week 2", content: `<div class="def-box"><strong>Key Takeaways</strong><ul><li>Classical ciphers are weak but teach Shannon's principles.</li><li>Vigenere defeated by Kasiski; Hill defeated by Known Plaintext.</li><li>Modern security requires resistance to CPA/CCA.</li></ul></div>` }
+        ]
+      },
+      // ==========================================
+      // WEEK 3: Stream Ciphers
+      // ==========================================
+      {
+        week: 3, title: "Stream Ciphers", subtitle: "LFSR, RC4, and Randomness",
+        slides: [
+          { id: "3.1", title: "Stream Cipher Model", content: `<div class="math-display">$C_i = P_i \oplus K_i$</div><p>Bit-by-bit encryption. Key stream $K$ generated from seed.</p><p>Same function for Enc/Dec: $P_i = C_i \oplus K_i$.</p>` },
+          { id: "3.2", title: "One-Time Pad (OTP) Definition", content: `<div class="theorem-box">Key $K$ is random, length of message, used once.</div><p>Information Theoretic Security: $P(M=m|C=c) = P(M=m)$.</p><div class="def-box"><strong>Properties:</strong> Unconditionally secure.</div>` },
+          { id: "3.3", title: "Solved: OTP Implementation", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Encrypt 'H' (1001000) with Key 'A' (1000001).<br><ol><li>Align bits.</li><li>$1001000 \oplus 1000001 = 0001001$.</li></ol><strong>Ciphertext:</strong> 0001001.</div>` },
+          { id: "3.4", title: "Two-Time Pad Attack", content: `<div class="warning-box"><div class="warning-title">Never Reuse Keys</div>If $K$ is reused: $C_1 \oplus C_2 = (P_1 \oplus K) \oplus (P_2 \oplus K) = P_1 \oplus P_2$.</div><p>XOR of plaintexts reveals structure (e.g., spaces in English).</p>` },
+          { id: "3.5", title: "Solved: Two-Time Pad Scenario", content: `<div class="example-box"><div class="example-title">Scenario Analysis</div><strong>Problem:</strong> Alice encrypts $P_1$ and $P_2$ with same key. Attacker sees $C_1, C_2$.<br><ol><li>Attacker computes $C_1 \oplus C_2 = P_1 \oplus P_2$.</li><li>If $P_1$ has spaces (ASCII 00100000), XOR reveals plaintext positions.</li><li>Known plaintexts (headers) make this trivial.</li></ol></div>` },
+          { id: "3.6", title: "LFSR Definition", content: `<div class="def-box"><strong>Definition</strong>Linear Feedback Shift Register. Hardware efficient pseudo-random generator.</div><p>Structure: $n$-bit register. New bit is XOR of specific "taps".</p>` },
+          { id: "3.7", title: "LFSR Polynomial", content: `<p>Connection polynomial $P(x) = c_n x^n + \dots + c_1 x + 1$.</p><p>$c_i=1$ implies tap present.</p><div class="theorem-box"><strong>Max Period</strong>Period is $2^n - 1$ if polynomial is primitive.</div>` },
+          { id: "3.8", title: "Solved: LFSR Trace 1", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> LFSR Poly $x^3 + x + 1$. Init state 110.<br><ol><li>State: 110. Output bit: 0. Feedback: $1 \oplus 0 = 1$. New state: 111.</li><li>State: 111. Output bit: 1. Feedback: $1 \oplus 1 = 0$. New state: 011.</li><li>State: 011. Output bit: 1. Feedback: $1 \oplus 0 = 1$. New state: 101.</li></ol><strong>Stream:</strong> 0, 1, 1...</div>` },
+          { id: "3.9", title: "Solved: LFSR Trace 2", content: `<div class="example-box"><div class="example-title">Solved Example (Continued)</div><strong>Problem:</strong> Continue trace for $x^3 + x + 1$, Init 110.<br><ol><li>State: 101. Output 1. Feedback $1 \oplus 1 = 0$. New: 010.</li><li>State: 010. Output 0. Feedback $0 \oplus 0 = 0$. New: 001.</li><li>State: 001. Output 1. Feedback $0 \oplus 1 = 1$. New: 100.</li><li>State: 100. Output 0. Feedback $1 \oplus 0 = 1$. New: 110 (Initial State).</li></ol><strong>Period:</strong> 7 ($2^3 - 1$).</div>` },
+          { id: "3.10", title: "Berlekamp-Massey Attack", content: `<div class="def-box"><strong>Attack</strong>Algorithm to find shortest LFSR for a given sequence.</div><p>Given $2n$ output bits, attacker can reconstruct the feedback polynomial.</p><div class="warning-box"><div class="warning-title">Result</div>Single LFSRs are NOT secure.</div>` },
+          { id: "3.11", title: "Solved: LFSR Security", content: `<div class="example-box"><div class="example-title">Example Analysis</div><strong>Scenario:</strong> Attacker intercepts stream bits 0110100...<br><ol><li>Attacker feeds bits into Berlekamp-Massey algorithm.</li><li>Algorithm outputs polynomial $x^3 + x + 1$.</li><li>Attacker now predicts all future bits.</li></ol></div>` },
+          { id: "3.12", title: "Non-Linear Combiners", content: `<p>Combine multiple LFSRs using a non-linear function $f$.</p><p>Example: Geffe Generator (uses three LFSRs).</p><p>Resistant to simple linear algebra attacks.</p>` },
+          { id: "3.13", title: "RC4 Algorithm", content: `<div class="def-box"><strong>Description</strong>Variable key length stream cipher.</div><p>1. Key Scheduling Algorithm (KSA): Initialize array $S$ of 256 bytes.</p><p>2. Pseudo-Random Generation (PRGA): Swap bytes, output keystream.</p>` },
+          { id: "3.14", title: "RC4: KSA Steps", content: `<p>Initialize $S[i] = i$ for $i=0..255$.</p><p>For $i=0..255$:</p><p>$j = (j + S[i] + K[i \bmod keylen]) \bmod 256$.</p><p>Swap $S[i], S[j]$.</p>` },
+          { id: "3.15", title: "RC4: PRGA Steps", content: `<p>Initialize $i=0, j=0$.</p><p>Loop:</p><ol><li>$i = (i + 1) \bmod 256$.</li><li>$j = (j + S[i]) \bmod 256$.</li><li>Swap $S[i], S[j]$.</li><li>$t = (S[i] + S[j]) \bmod 256$.</li><li>Output $S[t]$ as keystream byte.</li></ol>` },
+          { id: "3.16", title: "RC4 Weaknesses", content: `<div class="warning-box"><div class="warning-title">Vulnerability</div>Weak keys in first bytes. Biases in keystream.</div><p><strong>WEP:</strong> Used RC4 with short IV. Attackers recovered keys in minutes.</p><p>Deprecated in TLS.</p>` },
+          { id: "3.17", title: "Synchronous vs Self-Synchronizing", content: `<p><strong>Synchronous:</strong> Keystream independent of plaintext. Sender/Receiver must be synchronized.</p><p><strong>Self-Synchronizing (CFB):</strong> Keystream depends on previous ciphertext bits. Resyncs automatically after errors.</p>` },
+          { id: "3.18", title: "RNG Requirements", content: `<ol><li><strong>Randomness:</strong> Uniform distribution.</li><li><strong>Unpredictability:</strong> Cannot predict next bit.</li><li><strong>Forward/Backward Secrecy:</strong> Compromised state doesn't leak past/future.</li></ol>` },
+          { id: "3.19", title: "TRNG vs PRNG", content: `<table><tr><th>TRNG</th><th>PRNG</th></tr><tr><td>Physical source (noise)</td><td>Algorithms (LFSR)</td></tr><tr><td>Not reproducible</td><td>Reproducible with seed</td></tr><tr><td>Used for Key Gen</td><td>Used for Stream Ciphers</td></tr></table>` },
+          { id: "3.20", title: "A5/1 (GSM)", content: `<p>Stream cipher for 2G mobile phones.</p><p>Uses 3 LFSRs with irregular clocking.</p><div class="warning-box"><div class="warning-title">Status</div>Broken. Rainbow tables exist.</div>` },
+          { id: "3.21", title: "ChaCha20", content: `<div class="def-box"><strong>Modern Alternative</strong>A stream cipher based on ARX (Add-Rotate-XOR).</div><div class="usage-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div class="usage-content">Used in TLS 1.3, HTTPS, SSH. Replaces RC4.</div></div>` },
+          { id: "3.22", title: "ChaCha20 Quarter Round", content: `<p>Operates on 4 32-bit words: $a, b, c, d$.</p><ol><li>$a += b; d ^= a; d <<<= 16;$</li><li>$c += d; b ^= c; b <<<= 12;$</li><li>$a += b; d ^= a; d <<<= 8;$</li><li>$c += d; b ^= c; b <<<= 7;$</li></ol><p>Highly efficient on software.</p>` },
+          { id: "3.23", title: "Stream Cipher Pitfalls", content: `<p>1. Never reuse Key/IV pair.</p><p>2. Ensure synchronization.</p><p>3. Integrity check required (Stream ciphers provide no integrity).</p>` },
+          { id: "3.24", title: "Solved: Stream Encryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> PRNG outputs 1011. Message 1100.<br><ol><li>XOR: $1100 \oplus 1011 = 0111$.</li></ol><strong>Ciphertext:</strong> 0111.</div>` },
+          { id: "3.25", title: "Summary: Week 3", content: `<div class="def-box"><strong>Key Takeaways</strong><ul><li>Stream ciphers approximate OTP using PRNGs.</li><li>LFSRs are mathematically linear and insecure alone.</li><li>RC4 is broken; use ChaCha20 or AES-CTR.</li></ul></div>` }
+        ]
+      }
+    ];
+
+    // RENDER ENGINE
+    const mainNav = document.getElementById('main-nav');
+    const mainContent = document.getElementById('main-content');
+
+    courseData.forEach(w => {
+      const secTitle = document.createElement('div');
+      secTitle.className = 'nav-title';
+      secTitle.textContent = `Week ${w.week}`;
+      mainNav.appendChild(secTitle);
+
+      w.slides.forEach(s => {
+        const link = document.createElement('a');
+        link.className = 'nav-link';
+        link.textContent = s.title;
+        link.onclick = () => document.querySelector(`[data-id="${w.week}-${s.id}"]`)?.scrollIntoView({ behavior: 'smooth' });
+        mainNav.appendChild(link);
+      });
+
+      const sec = document.createElement('section');
+      sec.className = 'week-section';
+      sec.innerHTML = `
+        <div class="week-header">
+          <div class="week-badge">Week ${w.week}</div>
+          <h1 class="week-title">${w.title}</h1>
+          <p class="week-subtitle">${w.subtitle}</p>
+        </div>
+        ${w.slides.map(s => `
+          <article class="slide" data-id="${w.week}-${s.id}">
+            <div class="slide-header">
+              <div class="slide-num">${s.id}</div>
+              <h2 class="slide-title">${s.title}</h2>
+            </div>
+            ${s.content}
+          </article>
+        `).join('')}
+      `;
+      mainContent.appendChild(sec);
+    });
+
+    // KaTeX Rendering
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>

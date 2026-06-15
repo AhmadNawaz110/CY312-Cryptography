@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Cryptography - Weeks 7 to 9 (Expanded)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc; --bg-card: #ffffff; --bg-elevated: #f1f5f9; --fg: #0f172a; --fg-muted: #475569; --fg-dim: #94a3b8;
+      --accent: #2563eb; --accent-dark: #1d4ed8; --success: #059669; --warning: #d97706; --danger: #dc2626; --purple: #7c3aed; --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); scroll-behavior: smooth; }
+    body { display: flex; min-height: 100vh; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Sidebar */
+    .sidebar { position: fixed; width: 280px; height: 100vh; background: #fff; border-right: 1px solid var(--border); padding: 24px 16px; overflow-y: auto; z-index: 100; }
+    .brand { font-size: 1.25rem; font-weight: 800; color: var(--accent); margin-bottom: 32px; padding: 0 8px; display: flex; align-items: center; gap: 10px; }
+    .nav-section { margin-bottom: 32px; }
+    .nav-title { font-size: 0.7rem; font-weight: 700; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 8px; margin-bottom: 12px; }
+    .nav-link { display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 6px; color: var(--fg-muted); text-decoration: none; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .nav-link:hover { background: var(--bg-elevated); color: var(--fg); }
+    .nav-link.active { background: rgba(37, 99, 235, 0.1); color: var(--accent); font-weight: 600; }
+
+    /* Main Content */
+    main { margin-left: 280px; flex: 1; padding: 40px 60px; max-width: 1000px; }
+    
+    /* Week Header */
+    .week-header { margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .week-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: var(--accent); color: white; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; }
+    .week-title { font-size: 2.5rem; font-weight: 800; color: var(--fg); margin-bottom: 8px; letter-spacing: -0.03em; line-height: 1.1; }
+    .week-subtitle { font-size: 1.1rem; color: var(--fg-muted); font-weight: 400; }
+
+    /* Slide Cards */
+    .slide { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 28px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+    .slide-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+    .slide-num { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: var(--fg); color: white; border-radius: 6px; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+    .slide-title { font-size: 1.15rem; font-weight: 700; color: var(--fg); line-height: 1.3; margin-top: 2px; }
+    
+    /* Content Typography */
+    p { line-height: 1.6; color: var(--fg-muted); margin-bottom: 10px; font-size: 0.9rem; }
+    strong { color: var(--fg); font-weight: 600; }
+
+    /* Specialized Boxes */
+    .def-box { background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.2); border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 6px; margin: 14px 0; }
+    .def-box strong { color: var(--accent); font-size: 0.85rem; display: block; margin-bottom: 2px; }
+    
+    .theorem-box { background: rgba(124, 58, 237, 0.05); border: 1px solid rgba(124, 58, 237, 0.2); border-left: 4px solid var(--purple); padding: 12px 16px; border-radius: 6px; margin: 14px 0; }
+    .theorem-box strong { color: var(--purple); font-size: 0.85rem; display: block; margin-bottom: 2px; }
+
+    .example-box { border: 1px solid var(--border); background: #ffffff; padding: 16px; border-radius: 6px; margin: 16px 0; }
+    .example-title { font-size: 0.85rem; font-weight: 700; color: var(--warning); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .example-title::before { content: ''; width: 6px; height: 6px; background: var(--warning); border-radius: 50%; }
+    
+    .usage-box { background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.2); padding: 10px 14px; border-radius: 6px; margin: 14px 0; display: flex; gap: 10px; align-items: flex-start; }
+    .usage-box svg { width: 18px; height: 18px; color: var(--success); flex-shrink: 0; margin-top: 2px; }
+    .usage-content { font-size: 0.85rem; color: var(--fg-muted); }
+    .usage-content strong { color: var(--success); }
+
+    .warning-box { background: rgba(220, 38, 38, 0.05); border: 1px solid rgba(220, 38, 38, 0.2); padding: 10px 14px; border-radius: 6px; margin: 14px 0; }
+    .warning-title { color: var(--danger); font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+
+    .math-display { margin: 14px 0; padding: 10px; background: var(--bg-elevated); border-radius: 4px; text-align: center; overflow-x: auto; font-size: 0.9rem; }
+    
+    ol { list-style: none; counter-reset: item; padding-left: 8px; margin: 10px 0; }
+    ol li { counter-increment: item; margin-bottom: 6px; position: relative; padding-left: 24px; font-size: 0.9rem; }
+    ol li::before { content: counter(item); position: absolute; left: 0; top: 2px; width: 18px; height: 18px; background: var(--bg-elevated); color: var(--accent); border-radius: 50%; text-align: center; font-size: 0.7rem; font-weight: 700; line-height: 18px; }
+    ul { list-style-type: disc; margin-left: 20px; margin-bottom: 10px; }
+    ul li { margin-bottom: 4px; color: var(--fg-muted); font-size: 0.9rem; }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
+    th { background: var(--bg-elevated); padding: 6px 10px; text-align: left; font-weight: 600; color: var(--fg); border-bottom: 1px solid var(--border); }
+    td { padding: 6px 10px; border-bottom: 1px solid var(--border); color: var(--fg-muted); }
+
+    /* Responsive */
+    @media (max-width: 1024px) { body { flex-direction: column; } .sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 16px; } main { margin-left: 0; padding: 24px; } .nav-section { display: none; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Crypto with Engr. M Ahmad Nawaz</div>
+    <nav id="main-nav"></nav>
+  </aside>
+
+  <main id="main-content"></main>
+
+  <script>
+    // COMPLETE DATA: WEEKS 7-9 (40+ Slides Each)
+    const courseData = [
+      // ==========================================
+      // WEEK 7: MACs, Hash Functions & Security
+      // ==========================================
+      {
+        week: 7, title: "MACs & Hash Functions", subtitle: "Integrity, Authentication, and Collision Resistance",
+        slides: [
+          { id: "7.1", title: "Data Integrity Requirements", content: `<div class="def-box"><strong>Core Requirement</strong>Data must arrive at the receiver exactly as it was sent, without modification.</div><p>Encryption provides confidentiality but does not guarantee integrity. Active attackers can flip bits in ciphertext to manipulate the plaintext.</p>` },
+          { id: "7.2", title: "Hash Functions: Definition", content: `<div class="def-box"><strong>Definition</strong>A mathematical function $H$ that maps an input string of arbitrary length to a fixed-size output string (digest).</div><p><strong>Key Property:</strong> It must be computationally efficient to compute $h = H(M)$.</p>` },
+          { id: "7.3", title: "Property: Pre-image Resistance", content: `<div class="theorem-box"><strong>One-Way Function</strong>Given a hash value $h$, it is computationally infeasible to find any message $M$ such that $H(M) = h$.</div><p>This prevents an attacker from reverse-engineering the original data from its hash.</p>` },
+          { id: "7.4", title: "Property: Second Pre-image Resistance", content: `<div class="theorem-box"><strong>Weak Collision Resistance</strong>Given a specific message $M_1$, it is infeasible to find another message $M_2 \neq M_1$ such that $H(M_1) = H(M_2)$.</div><p>Protects against an attacker modifying a specific intercepted message.</p>` },
+          { id: "7.5", title: "Property: Collision Resistance", content: `<div class="theorem-box"><strong>Strong Collision Resistance</strong>It is infeasible to find any pair $(M_1, M_2)$ such that $M_1 \neq M_2$ and $H(M_1) = H(M_2)$.</div><p>This is the hardest requirement to satisfy.</p>` },
+          { id: "7.6", title: "The Birthday Paradox", content: `<p><strong>Question:</strong> In a room of how many people is there a >50% chance two share a birthday?</p><p>Intuitively 183 (365/2)? <strong>No.</strong> The answer is 23.</p><p>This is due to the combinatorial number of pairs: $\frac{n(n-1)}{2}$.</p>` },
+          { id: "7.7", title: "Birthday Paradox Implication", content: `<div class="def-box"><strong>Implication for Hashes</strong>For a hash output of size $n$ bits, the work factor to find a collision is not $O(2^n)$, but rather $O(2^{n/2})$.</div><p>To achieve 128-bit security against collisions, you need a 256-bit hash output.</p>` },
+          { id: "7.8", title: "Solved: Birthday Attack Work", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Estimate the work to find a collision in SHA-1 (160 bits) vs SHA-256.<br><ol><li>SHA-1: $n=160$. Work = $2^{160/2} = 2^{80}$. (Feasible for state actors).</li><li>SHA-256: $n=256$. Work = $2^{256/2} = 2^{128}$. (Computationally infeasible).</li></ol></div>` },
+          { id: "7.9", title: "Merkle-Damgard Construction", content: `<div class="def-box"><strong>Structure</strong>Iterative design used in MD5, SHA-1, SHA-2.</div><p><strong>Process:</strong> Message broken into blocks. Each block passes through a compression function $f$ along with the output of the previous block.</p><p>$H_i = f(H_{i-1}, M_i)$.</p>` },
+          { id: "7.10", title: "Length Extension Attack", content: `<div class="warning-box"><div class="warning-title">Vulnerability</div>Given $H(M)$ and the length of $M$, an attacker can construct $H(M || padding || M')$ without knowing $M$.</div><p>This works because the hash output is just the internal state after processing $M$.</p>` },
+          { id: "7.11", title: "SHA-2 Family", content: `<table><tr><th>Algorithm</th><th>Block Size</th><th>Output Size</th></tr><tr><td>SHA-224</td><td>512 bits</td><td>224 bits</td></tr><tr><td>SHA-256</td><td>512 bits</td><td>256 bits</td></tr><tr><td>SHA-512</td><td>1024 bits</td><td>512 bits</td></tr></table>` },
+          { id: "7.12", title: "SHA-256 Internal Logic", content: `<p>Uses 8 working variables (a-h) and 64 round constants ($K_t$).</p><p><strong>Functions:</strong></p><ul><li>$Ch(x,y,z) = (x \land y) \oplus (\neg x \land z)$</li><li>$Maj(x,y,z) = (x \land y) \oplus (x \land z) \oplus (y \land z)$</li><li>$\Sigma_1$, $\Sigma_0$ (Rotation XORs).</li></ul>` },
+          { id: "7.13", title: "SHA-3 (Keccak)", content: `<div class="def-box"><strong>Structure</strong>Uses "Sponge Construction".</div><p>Not vulnerable to length extension attacks.</p><p><strong>Process:</strong> Absorbing phase (XOR blocks into state, permute) and Squeezing phase (read output).</p>` },
+          { id: "7.14", title: "Message Authentication Code (MAC)", content: `<div class="def-box"><strong>Definition</strong>A small piece of data used to verify integrity and authenticity.</div><p>Unlike a hash, a MAC uses a secret key $K$.</p><p>$T = MAC(K, M)$.</p><p>Only parties with $K$ can generate or verify the tag.</p>` },
+          { id: "7.15", title: "MAC Security Requirements", content: `<ol><li><strong>Key Non-Recovery:</strong> Attacker cannot derive $K$.</li><li><strong>Forgery Resistance:</strong> Attacker cannot generate valid $(M, T)$ for new $M$, even after querying the MAC oracle for other messages.</li></ol>` },
+          { id: "7.16", title: "HMAC Construction", content: `<div class="math-display">$HMAC(K, M) = H((K \oplus opad) || H((K \oplus ipad) || M))$</div><p>Wraps the hash function with two rounds of key mixing.</p>` },
+          { id: "7.17", title: "HMAC Inner Workings", content: `<p><strong>Step 1:</strong> Key $K$ padded to block size $b$.</p><p><strong>Step 2:</strong> Create $S_i = K \oplus ipad$ (ipad = 0x36...).</p><p><strong>Step 3:</strong> Hash $S_i || M \to H_{inner}$.</p><p><strong>Step 4:</strong> Create $S_o = K \oplus opad$ (opad = 0x5C...).</p><p><strong>Step 5:</strong> Hash $S_o || H_{inner} \to Result$.</p>` },
+          { id: "7.18", title: "Solved: HMAC Logic", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Why use two different pads (ipad/opad)?<br><strong>Answer:</strong> To ensure the inner and outer hashes start with different IVs derived from the same key. This prevents mixing attacks and makes HMAC provably secure assuming the hash function is a PRF.</div>` },
+          { id: "7.19", title: "CBC-MAC", content: `<div class="def-box"><strong>Construction</strong>Uses Block Cipher (e.g., AES) in CBC mode.</div><p>Encrypt message blocks. Only the final ciphertext block is the tag.</p><p>$T = E_K(E_K(...E_K(M_1 \oplus IV) \oplus M_2)...)$.</p><div class="warning-box"><div class="warning-title">Warning</div>IV must be fixed (usually 0) for CBC-MAC. It is NOT secure for variable length messages without modifications (CMAC).</div>` },
+          { id: "7.20", title: "Authenticated Encryption (AE)", content: `<div class="def-box"><strong>Goal</strong>Provide Confidentiality + Integrity + Authenticity simultaneously.</div><p>Simply encrypting and then adding a MAC is tricky. The order matters.</p>` },
+          { id: "7.21", title: "Approaches to AE", content: `<p><strong>Encrypt-and-MAC:</strong> Encrypt plaintext, MAC plaintext. (SSH uses this). Leaks plaintext info if MAC is not keyed.</p><p><strong>MAC-then-Encrypt:</strong> MAC plaintext, then encrypt both. (SSL/TLS uses this). Vulnerable to padding oracle attacks if decryption fails before MAC check.</p><p><strong>Encrypt-then-MAC:</strong> Encrypt plaintext, MAC the ciphertext. (Best practice). Detects tampering before decryption.</p>` },
+          { id: "7.22", title: "Galois Counter Mode (GCM)", content: `<div class="def-box"><strong>AES-GCM</strong>High-performance AEAD mode.</div><p><strong>Components:</strong></p><ol><li>Counter Mode (CTR) for Encryption (Parallelizable).</li><li>Galois Field Multiplication (GHASH) for Authentication (Parallelizable).</li></ol>` },
+          { id: "7.23", title: "Poly1305", content: `<p>A one-time authenticator.</p><p>Used in ChaCha20-Poly1305 suite.</p><p>Computes $Tag = ((M \cdot r) + s) \bmod p$.</p><p>Extremely fast on software without AES hardware acceleration.</p>` },
+          { id: "7.24", title: "Key Derivation Functions (KDF)", content: `<div class="def-box"><strong>Purpose</strong>Derive one or more secret keys from a master secret (e.g., password).</div><p><strong>Requirements:</strong> Slow, Salted.</p><p><strong>Examples:</strong> PBKDF2, bcrypt, scrypt, Argon2.</p>` },
+          { id: "7.25", title: "PBKDF2", content: `<p>Password-Based Key Derivation Function 2.</p><p>Applies HMAC iteratively:</p><div class="math-display">$DK = HMAC(P, Salt || c)$ (Repeated thousands of times).</div><p>Slows down brute-force attacks.</p>` },
+          { id: "7.26", title: "Attacks on Hashes: Rainbow Tables", content: `<div class="def-box"><strong>Attack</strong>Pre-computed database of hash chains for reversing password hashes.</div><p><strong>Defense:</strong> Use a unique "Salt" for each user. The salt changes the input to the hash, making pre-computed tables useless.</p>` },
+          { id: "7.27", title: "MD5 Status", content: `<div class="warning-box"><div class="warning-title">Broken</div>Collision attacks are trivial. Pre-image attacks are theoretical but MD5 should not be used.</div><p>Collision generated in seconds. Used in Flame malware to forge code signing.</p>` },
+          { id: "7.28", title: "SHA-1 Status", content: `<p><strong>SHAttered (2017):</strong> First practical collision generated.</p><p>Cost: ~6500 years of single-CPU computation.</p><p>Browsers no longer accept SHA-1 SSL certificates.</p>` },
+          { id: "7.29", title: "Summary: Week 7", content: `<div class="def-box"><strong>Key Concepts</strong><ul><li>Hashes provide Integrity only if key is known (MAC).</li><li>HMAC is robust for message authentication.</li><li>Birthday attack limits collision resistance to $2^{n/2}$.</li><li>Encrypt-then-MAC is the secure order for AE.</li></ul></div>` }
+        ]
+      },
+      // ==========================================
+      // WEEK 8: Number Theory & Algorithms
+      // ==========================================
+      {
+        week: 8, title: "Number Theory", subtitle: "Mathematical Foundations of Public Key Crypto",
+        slides: [
+          { id: "8.1", title: "Modular Arithmetic Review", content: `<div class="def-box"><strong>Congruence</strong>$a \equiv b \pmod n$ means $n$ divides $(a-b)$.</div><p>Examples:</p><p>$17 \equiv 2 \pmod 5$.</p><p>$-3 \equiv 7 \pmod{10}$.</p>` },
+          { id: "8.2", title: "Properties of Modular Arithmetic", content: `<p><strong>Addition:</strong> $(a + b) \bmod n = [(a \bmod n) + (b \bmod n)] \bmod n$.</p><p><strong>Multiplication:</strong> $(a \times b) \bmod n = [(a \bmod n) \times (b \bmod n)] \bmod n$.</p><div class="theorem-box"><strong>Note</strong>Division is NOT straightforward. You cannot simply divide modulus.</div>` },
+          { id: "8.3", title: "Euclidean Algorithm", content: `<div class="def-box"><strong>Purpose</strong>Efficiently compute GCD($a, b$).</div><p><strong>Logic:</strong> $\gcd(a, b) = \gcd(b, a \bmod b)$.</p><p>Repeats until remainder is 0.</p>` },
+          { id: "8.4", title: "Solved: Euclidean Algorithm", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $\gcd(252, 105)$.<br><ol><li>$252 = 2(105) + 42$.</li><li>$105 = 2(42) + 21$.</li><li>$42 = 2(21) + 0$.</li></ol><strong>Result:</strong> 21.</div>` },
+          { id: "8.5", title: "Extended Euclidean Algorithm (EEA)", content: `<div class="def-box"><strong>Purpose</strong>Find integers $x, y$ such that $ax + by = \gcd(a, b)$.</div><p>This is crucial for finding Modular Inverses.</p>` },
+          { id: "8.6", title: "Solved: EEA", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $x,y$ for $\gcd(101, 23)$.<br><ol><li>$101 = 4(23) + 9$.</li><li>$23 = 2(9) + 5$.</li><li>$9 = 1(5) + 4$.</li><li>$5 = 1(4) + 1$.</li><li>Back-substitute: $1 = 22(23) - 5(101)$.</li></ol><strong>Result:</strong> $x=-5, y=22$.</div>` },
+          { id: "8.7", title: "Modular Inverse", content: `<div class="def-box"><strong>Definition</strong>Multiplicative inverse of $a$ modulo $n$ is integer $x$ such that $ax \equiv 1 \pmod n$.</div><div class="theorem-box"><strong>Existence Condition</strong>Inverse exists iff $\gcd(a, n) = 1$.</div>` },
+          { id: "8.8", title: "Solved: Finding Modular Inverse", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $7^{-1} \pmod{26}$.<br><ol><li>$\gcd(7, 26) = 1$. Inverse exists.</li><li>Use EEA: $26(-11) + 7(42)$... wait.<br>Or find multiple: $7 \times 15 = 105$. $105 = 4 \times 26 + 1$.</li></ol><strong>Result:</strong> 15.</div>` },
+          { id: "8.9", title: "Prime Numbers", content: `<div class="def-box"><strong>Definition</strong>Integer $p > 1$ divisible only by 1 and itself.</div><p><strong>Fundamental Theorem of Arithmetic:</strong> Every integer $> 1$ is a unique product of primes.</p>` },
+          { id: "8.10", title: "Prime Distribution", content: `<p>Prime Number Theorem: Number of primes $\le x$ is approx $x / \ln x$.</p><p>Primes become rarer as numbers get larger, but there are still plenty of them for cryptography.</p>` },
+          { id: "8.11", title: "Fermat's Little Theorem", content: `<div class="theorem-box"><strong>Theorem</strong>If $p$ is prime and $\gcd(a, p) = 1$, then $a^{p-1} \equiv 1 \pmod p$.</div><p>Useful for modular reduction.</p>` },
+          { id: "8.12", title: "Solved: Fermat's Reduction", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $3^{100} \pmod 7$.<br><ol><li>$p=7$. Exponent mod $p-1$.</li><li>$100 = 16 \times 6 + 4$.</li><li>$3^{100} \equiv 3^4 \pmod 7$.</li><li>$81 \equiv 4 \pmod 7$.</li></ol><strong>Result:</strong> 4.</div>` },
+          { id: "8.13", title: "Euler's Totient Function $\phi(n)$", content: `<div class="def-box"><strong>Definition</strong>Count of integers $\le n$ coprime to $n$.</div><p><strong>Rules:</strong></p><ul><li>For prime $p$: $\phi(p) = p-1$.</li><li>For $n = p \times q$: $\phi(n) = (p-1)(q-1)$.</li></ul>` },
+          { id: "8.14", title: "Euler's Theorem", content: `<div class="theorem-box"><strong>Theorem</strong>If $\gcd(a, n) = 1$, then $a^{\phi(n)} \equiv 1 \pmod n$.</div><p>Generalization of Fermat's Little Theorem. Basis of RSA.</p>` },
+          { id: "8.15", title: "Solved: Euler's Totient", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Find $\phi(21)$.<br><ol><li>$21 = 3 \times 7$.</li><li>$\phi(21) = (3-1)(7-1) = 2 \times 6 = 12$.</li></ol></div>` },
+          { id: "8.16", title: "Primality Testing: Fermat Test", content: `<p>Probabilistic test.</p><p>Pick random $a$. Check if $a^{n-1} \equiv 1 \pmod n$.</p><p>If false $\to$ Composite.</p><p>If true $\to$ Maybe Prime.</p>` },
+          { id: "8.17", title: "Carmichael Numbers", content: `<div class="warning-box"><div class="warning-title">Fermat Liars</div>Composite numbers $n$ that satisfy $a^{n-1} \equiv 1 \pmod n$ for all $a$ coprime to $n$.</div><p>Example: 561.</p><p>These break the Fermat test.</p>` },
+          { id: "8.18", title: "Miller-Rabin Test", content: `<p>Stronger probabilistic test. Detects Carmichael numbers.</p><p>Writes $n-1 = 2^k q$.</p><p>Checks if sequence $a^q, a^{2q}, \dots, a^{2^{k-1}q}$ contains a "Non-Trivial Square Root of 1".</p>` },
+          { id: "8.19", title: "Discrete Logarithm Problem (DLP)", content: `<div class="def-box"><strong>Problem</strong>Given $g, y, p$, find $x$ such that $y = g^x \bmod p$.</div><p>Base of Diffie-Hellman and DSA security.</p><p>Exponentiation is easy ($O(n)$). Logarithm is hard.</p>` },
+          { id: "8.20", title: "Algorithms for DLP", content: `<p><strong>Brute Force:</strong> $O(p)$.</p><p><strong>Baby-step Giant-step:</strong> Time/Space $O(\sqrt{p})$.</p><p><strong>Pollard's Rho:</strong> Time $O(\sqrt{p})$, Space $O(1)$.</p><p>Index Calculus (Sub-exponential).</p>` },
+          { id: "8.21", title: "Square and Multiply Algorithm", content: `<div class="def-box"><strong>Purpose</strong>Fast Modular Exponentiation.</div><p>Convert exponent to binary. Scan bits left to right.</p><ul><li>If bit is 0: Square.</li><li>If bit is 1: Square then Multiply.</li></ul><p>Complexity: $O(\log e)$ multiplications.</p>` },
+          { id: "8.22", title: "Solved: Square and Multiply", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Calculate $3^{13} \pmod{11}$.<br><ol><li>$13 = 1101_2$.</li><li>Start $R=1$.</li><li>Bit 1: Square(1)=1, Mult(3) $\to$ 3.</li><li>Bit 1: Square(3)=9, Mult(3) $\to$ 27 $\equiv$ 5.</li><li>Bit 0: Square(5)=25 $\equiv$ 3.</li><li>Bit 1: Square(3)=9, Mult(3) $\to$ 27 $\equiv$ 5.</li></ol><strong>Result:</strong> 5.</div>` },
+          { id: "8.23", title: "Factorization: Trial Division", content: `<p>Try dividing $n$ by all primes up to $\sqrt{n}$.</p><p>Complexity: $O(\sqrt{n})$.</p><p>Only feasible for small numbers (e.g., < $10^{15}$).</p>` },
+          { id: "8.24", title: "Factorization: Pollard's Rho", content: `<p>Heuristic algorithm.</p><p>Generates a pseudo-random sequence $x_{i+1} = f(x_i) \bmod n$.</p><p>Looks for a cycle in the sequence modulo a factor $p$.</p><p>Complexity: $O(n^{1/4})$. Much faster than trial division.</p>` },
+          { id: "8.25", title: "Integer Factorization: GNFS", content: `<div class="def-box"><strong>General Number Field Sieve</strong>The fastest known algorithm for factoring large integers.</div><p>Sub-exponential complexity: $O(\exp((\frac{64}{9} \log n)^{1/3} (\log \log n)^{2/3}))$.</p><p>This complexity dictates RSA key sizes (2048 bits needed for long-term security).</p>` },
+          { id: "8.26", title: "Chinese Remainder Theorem (CRT)", content: `<div class="theorem-box"><strong>Theorem</strong>If $n = p \times q$, knowing remainders modulo $p$ and $q$ is equivalent to knowing the remainder modulo $n$.</div><p>Used to speed up RSA decryption by a factor of 4.</p>` },
+          { id: "8.27", title: "Primitive Roots", content: `<div class="def-box"><strong>Generator</strong>An integer $g$ is a primitive root modulo $n$ if powers of $g$ generate all integers coprime to $n$.</div><p>Exists for $n=2, 4, p^k, 2p^k$.</p><p>Essential for Diffie-Hellman.</p>` },
+          { id: "8.28", title: "Quadratic Residues", content: `<div class="def-box"><strong>Definition</strong>An integer $q$ is a quadratic residue modulo $n$ if there exists an $x$ such that $x^2 \equiv q \pmod n$.</div><p>Used in probabilistic encryption (Goldwasser-Micali) and analysis.</p>` },
+          { id: "8.29", title: "Summary: Week 8", content: `<div class="def-box"><strong>Key Concepts</strong><ul><li>EEA is the tool for inverses.</li><li>Euler/Fermat theorems enable RSA.</li><li>Factoring is hard but sub-exponential.</li><li>Square-and-Multiply is efficient exponentiation.</li></ul></div>` }
+        ]
+      },
+      // ==========================================
+      // WEEK 9: Public Key Infrastructure & Apps
+      // ==========================================
+      {
+        week: 9, title: "PKI & Applications", subtitle: "RSA, Diffie-Hellman, Certificates",
+        slides: [
+          { id: "9.1", title: "Public Key Cryptography Review", content: `<div class="def-box"><strong>Concept</strong>Asymmetric keys. Public key for encryption/verification, Private key for decryption/signing.</div><p>Solves the key distribution problem.</p>` },
+          { id: "9.2", title: "RSA Algorithm Steps", content: `<p><strong>Key Gen:</strong></p><ol><li>Choose primes $p, q$.</li><li>$n = pq$.</li><li>$\phi(n) = (p-1)(q-1)$.</li><li>Choose $e$ coprime to $\phi(n)$.</li><li>Compute $d = e^{-1} \bmod \phi(n)$.</li></ol>` },
+          { id: "9.3", title: "RSA Encryption/Decryption", content: `<div class="math-display">$C = M^e \bmod n$<br>$M = C^d \bmod n$</div><p><strong>Correctness:</strong> Based on Euler's Theorem.</p>` },
+          { id: "9.4", title: "Solved: RSA Key Gen", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> $p=3, q=11$. Generate Keys.<br><ol><li>$n = 33$.</li><li>$\phi = 20$.</li><li>Choose $e=3$.</li><li>Find $d$: $3d \equiv 1 \pmod{20} \to d=7$.</li></ol><strong>Pub:</strong> (3, 33). <strong>Priv:</strong> (7, 33).</div>` },
+          { id: "9.5", title: "Solved: RSA Encryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Encrypt $M=5$ with Pub(3, 33).<br><ol><li>$C = 5^3 \bmod 33$.</li><li>$125 = 3 \times 33 + 26$.</li></ol><strong>Result:</strong> 26.</div>` },
+          { id: "9.6", title: "Solved: RSA Decryption", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> Decrypt $C=26$ with Priv(7, 33).<br><ol><li>$M = 26^7 \bmod 33$.</li><li>$26 \equiv -7$.</li><li>$(-7)^7 \equiv 5 \pmod{33}$ (calculated via Euler's totient or table).</li></ol><strong>Result:</strong> 5.</div>` },
+          { id: "9.7", title: "RSA Security: Factoring", content: `<div class="def-box"><strong>Security Basis</strong>Difficulty of factoring large $n$ into $p, q$.</div><p><strong>Key Sizes:</strong></p><ul><li>1024 bits: Broken (deprecated).</li><li>2048 bits: Standard until 2030.</li><li>3072 bits: Long term.</li></ul>` },
+          { id: "9.8", title: "Attacks on RSA: Small $e$", content: `<div class="warning-box"><div class="warning-title">Attack</div>If $e$ is small and $M$ is small, $C = M^e$ (no mod $n$).</div><p>Attacker takes the $e$-th root of $C$ to find $M$.</p><p><strong>Solution:</strong> Always pad messages (OAEP).</p>` },
+          { id: "9.9", title: "Attacks on RSA: Common Modulus", content: `<div class="warning-box"><div class="warning-title">Attack</div>Same message sent to multiple recipients with same $n$ but different $e_i$.</div><p>Attacker can recover $M$ using Extended Euclidean Algorithm without factoring $n$.</p>` },
+          { id: "9.10", title: "RSA Padding: OAEP", content: `<p>Optimal Asymmetric Encryption Padding.</p><p>Uses a Mask Generation Function (MGF) and Hash.</p><p>Adds randomness and structure.</p><p>Proves semantic security against chosen plaintext attacks.</p>` },
+          { id: "9.11", title: "RSA Signatures", content: `<p><strong>Signing:</strong> $S = M^d \bmod n$. (Encryption with Private Key).</p><p><strong>Verification:</strong> $M' = S^e \bmod n$. (Decryption with Public Key).</p><p>Check if $M' = M$.</p><div class="warning-box"><div class="warning-title">Note</strong>Textbook RSA signing is insecure. Use PSS (Probabilistic Signature Scheme).</div>` },
+          { id: "9.12", title: "Diffie-Hellman Key Exchange", content: `<div class="def-box"><strong>Purpose</strong>Establish shared secret over insecure channel.</div><p>Based on DLP.</p><p><strong>Public:</strong> $p, g$.</p><p>Alice sends $g^a$, Bob sends $g^b$.</p><p>Shared: $K = g^{ab}$.</p>` },
+          { id: "9.13", title: "Solved: DH Exchange", content: `<div class="example-box"><div class="example-title">Solved Example</div><strong>Problem:</strong> $p=11, g=2$. Alice $a=4$, Bob $b=3$.<br><ol><li>Alice sends $2^4 \bmod 11 = 16 \equiv 5$.</li><li>Bob sends $2^3 \bmod 11 = 8$.</li><li>Alice computes $8^4 \bmod 11 = 4$.</li><li>Bob computes $5^3 \bmod 11 = 125 \equiv 4$.</li></ol><strong>Shared:</strong> 4.</div>` },
+          { id: "9.14", title: "Man-in-the-Middle Attack on DH", content: `<div class="warning-box"><div class="warning-title">Vulnerability</strong>DH alone is unauthenticated. Attacker can intercept $g^a$ and send $g^c$ to Bob.</div><p>Attacker establishes separate keys with Alice and Bob.</p><p><strong>Solution:</strong> Use Digital Signatures or PKI to authenticate the exchange parameters.</p>` },
+          { id: "9.15", title: "ElGamal Encryption", content: `<p>Asymmetric encryption based on DLP.</p><p><strong>Key Gen:</strong> Private $x$, Public $Y = g^x$.</p><p><strong>Enc:</strong> Random $k$. $C_1 = g^k$, $C_2 = M \times Y^k$.</p><p><strong>Dec:</strong> $M = C_2 / C_1^x$.</p>` },
+          { id: "9.16", title: "Elliptic Curve Cryptography (ECC)", content: `<div class="def-box"><strong>Concept</strong>Cryptography based on the algebraic structure of elliptic curves over finite fields.</div><p><strong>Equation:</strong> $y^2 = x^3 + ax + b$.</p><p><strong>Advantage:</strong> Same security as RSA with much smaller keys.</p><p>256-bit ECC $\approx$ 3072-bit RSA.</p>` },
+          { id: "9.17", title: "ECDH", content: `<p>Elliptic Curve Diffie-Hellman.</p><p>Point Addition replaces exponentiation.</p><p>$K = d_A \times Q_B = d_B \times Q_A$.</p><p>Used in TLS 1.3 and modern messaging (Signal, WhatsApp).</p>` },
+          { id: "9.18", title: "Public Key Infrastructure (PKI)", content: `<div class="def-box"><strong>Definition</strong>System to manage keys and certificates.</div><p>Components: CA (Certificate Authority), RA (Registration Authority), Repository.</p>` },
+          { id: "9.19", title: "Certificate Authority (CA)", content: `<div class="def-box"><strong>Role</strong>Trusted third party.</div><p>Verifies identity (e.g., owns domain.com).</p><p>Issues Certificate: Binds Public Key to Identity.</p><p>Signs certificate with CA Private Key.</p>` },
+          { id: "9.20", title: "X.509 Certificate", content: `<p>Standard certificate format.</p><p><strong>Fields:</strong> Version, Serial No, Issuer (CA), Subject (User), Validity Period, Public Key, Signature Algorithm, Signature.</p>` },
+          { id: "9.21", title: "Certificate Chain", content: `<p>Hierarchy of trust.</p><p>Root CA $\to$ Intermediate CA $\to$ End Entity.</p><p>Browser trusts Root CA (pre-installed).</p><p>Verification: Verify signature up the chain to the Root.</p>` },
+          { id: "9.22", title: "Certificate Revocation", content: `<p><strong>Reasons:</strong> Key compromise, CA compromise, Change of affiliation.</p><p><strong>Methods:</strong></p><ul><li>CRL (Certificate Revocation List): List of bad certs.</li><li>OCSP (Online Certificate Status Protocol): Real-time query.</li></ul>` },
+          { id: "9.23", title: "TLS Handshake Overview", content: `<div class="def-box"><strong>Steps</strong></div><ol><li>ClientHello (Supported ciphers, Nonce).</li><li>ServerHello (Chosen cipher, Certificate, Nonce).</li><li>Key Exchange (DH/ECDH).</li><li>Finish (Verify integrity).</li></ol>` },
+          { id: "9.24", title: "TLS 1.3 Improvements", content: `<p><strong>Faster:</strong> 1-RTT handshake.</p><p><strong>More Secure:</strong></p><ul><li>Removed weak algorithms (RC4, CBC mode).</li><li>Mandatory Forward Secrecy.</li></ul>` },
+          { id: "9.25", title: "Perfect Forward Secrecy (PFS)", content: `<div class="def-box"><strong>Definition</strong>Compromise of long-term private key does not compromise past session keys.</div><p>Achieved using Ephemeral Diffie-Hellman (DHE/ECDHE).</p><p>Session keys are deleted after session ends.</p>` },
+          { id: "9.26", title: "PGP (Pretty Good Privacy)", content: `<div class="def-box"><strong>Application</strong>End-to-end encryption for emails.</div><p><strong>Hybrid System:</strong></p><ul><li>Message encrypted with Symmetric Key (Session Key).</li><li>Session Key encrypted with Receiver's Public Key.</li><li>Message signed with Sender's Private Key.</li></ul>` },
+          { id: "9.27", title: "Web of Trust", content: `<p>Decentralized trust model used in PGP.</p><p>Users sign each other's keys.</p><p>"I trust Alice, Alice trusts Bob, so I trust Bob's key."</p>` },
+          { id: "9.28", title: "Quantum Computing Threat", content: `<div class="warning-box"><div class="warning-title">Shor's Algorithm</strong>Can factor integers and solve DLP in polynomial time on a quantum computer.</div><p>Breaks RSA, DH, ECC.</p><p><strong>Post-Quantum Crypto:</strong> Lattice-based, Hash-based, Code-based cryptography.</p>` },
+          { id: "9.29", title: "Summary: Week 9", content: `<div class="def-box"><strong>Key Concepts</strong><ul><li>RSA relies on factoring difficulty.</li><li>DH relies on discrete log difficulty.</li><li>ECC offers efficiency.</li><li>PKI enables trust on the internet.</li><li>Forward Secrecy is critical for modern privacy.</li></ul></div>` }
+        ]
+      }
+    ];
+
+    // RENDER ENGINE
+    const mainNav = document.getElementById('main-nav');
+    const mainContent = document.getElementById('main-content');
+
+    courseData.forEach(w => {
+      const secTitle = document.createElement('div');
+      secTitle.className = 'nav-title';
+      secTitle.textContent = `Week ${w.week}`;
+      mainNav.appendChild(secTitle);
+
+      w.slides.forEach(s => {
+        const link = document.createElement('a');
+        link.className = 'nav-link';
+        link.textContent = s.title;
+        link.onclick = () => document.querySelector(`[data-id="${w.week}-${s.id}"]`)?.scrollIntoView({ behavior: 'smooth' });
+        mainNav.appendChild(link);
+      });
+
+      const sec = document.createElement('section');
+      sec.className = 'week-section';
+      sec.innerHTML = `
+        <div class="week-header">
+          <div class="week-badge">Week ${w.week}</div>
+          <h1 class="week-title">${w.title}</h1>
+          <p class="week-subtitle">${w.subtitle}</p>
+        </div>
+        ${w.slides.map(s => `
+          <article class="slide" data-id="${w.week}-${s.id}">
+            <div class="slide-header">
+              <div class="slide-num">${s.id}</div>
+              <h2 class="slide-title">${s.title}</h2>
+            </div>
+            ${s.content}
+          </article>
+        `).join('')}
+      `;
+      mainContent.appendChild(sec);
+    });
+
+    // KaTeX Rendering
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
