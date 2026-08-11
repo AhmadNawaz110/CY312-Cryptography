@@ -1,157 +1,243 @@
-# BSCY312: Cryptography & Information Security
+# BSCY312 – Cryptography
 
-**Institution:** Ghulam Ishaq Khan Institute of Engineering Sciences and Technology (GIKI)  
+## Course Outline
+
 **Program:** Cyber Security (CYB)  
 **Term:** Spring 2026  
 **Instructor:** Engr. Muhammad Ahmad Nawaz  
+**Institution:** GIK Institute
 
 ---
 
-## 📋 1. Course Information
+## 1. Course Information
 
 | Field | Details |
 |---|---|
-| **Course Code** | BSCY312 (CY312) |
-| **Course Title** | Cryptography |
-| **Prerequisite** | Differential Equations and Linear Algebra I |
-| **Instructor** | Engr. Muhammad Ahmad Nawaz |
-| **Office** | S01-, NAB, GIK Institute |
-| **Email** | [Engr.ahmad.nawaz@giki.edu.pk](mailto:Engr.ahmad.nawaz@giki.edu.pk) |
-| **Office Hours** | 09:30 a.m. – 01:00 p.m. |
+| Course Code | BSCY312 / CY312 |
+| Course Title | Cryptography |
+| Term | Spring 2026 |
+| Program | Cyber Security (CYB) |
+| Prerequisite | Differential Equations and Linear Algebra I |
+| Instructor | Engr. Muhammad Ahmad Nawaz |
+| Office | S01-, NAB, GIK Institute |
+| Email | Engr.ahmad.nawaz@giki.edu.pk |
+| Office Hours | 09:30 a.m. – 01:00 p.m. |
 
 ---
 
-## 📖 2. Course Description
+## 2. Course Description
 
-This course provides a structured introduction to cryptography, covering both classical and modern cryptographic concepts. It begins with foundational terminology, mathematical prerequisites, and the evolution of cryptography. The course then progresses through symmetric-key algorithms, stream ciphers, block ciphers, hash functions, message authentication, and authenticated encryption.
+Cryptography is a core course in cyber security that introduces the mathematical foundations, algorithms, protocols, and security principles used to protect information. The course begins with the fundamentals of cryptography, classical concepts, and the evolution of cryptographic systems. It then covers symmetric-key cryptography, stream ciphers, block ciphers, modes of operation, and cryptographic hash functions.
 
-Later sections introduce public-key cryptography, RSA, Diffie-Hellman, ElGamal, digital signatures, elliptic curve cryptography, and key exchange mechanisms. The course also covers advanced and emerging areas, including post-quantum cryptography, zero-knowledge proofs, authenticated key exchange, secure multi-party computation, and SSL/TLS session setup.
-
-### 🎯 Course Learning Outcomes (CLOs)
-Upon successful completion of this course, students are expected to be able to:
-1. Explain fundamental cryptographic concepts, terminology, and security principles.
-2. Analyze symmetric-key cryptographic algorithms, including stream ciphers and block ciphers.
-3. Understand the operation and security considerations of modern block cipher modes and cryptographic hash functions.
-4. Apply mathematical foundations such as modular arithmetic, Euler’s theorem, and discrete logarithms to public-key cryptography.
-5. Evaluate public-key cryptosystems, digital signatures, key exchange protocols, and authenticated encryption mechanisms.
-6. Develop an understanding of advanced cryptographic topics, including elliptic curve cryptography, post-quantum cryptography, zero-knowledge proofs, and secure multi-party computation.
+The course further explores message authentication, authenticated encryption, public-key cryptography, RSA, Diffie-Hellman, ElGamal, digital signatures, elliptic curve cryptography, and modern key exchange mechanisms. Advanced topics include post-quantum cryptography, lattice-based cryptography, isogenies, zero-knowledge proofs, secure multi-party computation, and SSL/TLS session setup.
 
 ---
 
-## 📅 3. Weekly Course Plan
+## 3. Course Objectives
 
-| Week | Topics | CLO Mapping |
-|:---:|---|:---:|
-| **1** | Overview of Cryptography and its Evolution <br> Basic Terminology and Concepts (Sets, GCD) <br> Importance and Applications of Cryptography <br> Kerckhoffs’s Principle | CLO-2, CLO-3 |
-| **2** | Symmetric Key Algorithms <br> Caesar Cipher and Key Shifting <br> Chosen Ciphertext Attacks <br> Understanding Chosen Plaintext Attacks | CLO-2, CLO-3 |
-| **3** | Introduction to Stream Ciphers <br> Key Stream Generators <br> Security Analysis of Stream Ciphers | CLO-2, CLO-3 |
-| **4** | Introduction to Block Ciphers <br> Block Cipher Modes of Operation (ECB, CBC, CFB, OFB) <br> Feistel Cipher | CLO-2, CLO-3 |
-| **5** | DES: Overview and Security Analysis <br> 3DES: Overview and Security Analysis | CLO-2, CLO-3 |
-| **6** | IDEA: Overview and Security Analysis <br> AES: Overview and Security Analysis <br> Introduction to Message Integrity & Techniques for Ensuring Integrity | — |
-| **7** | Message Authentication Codes (MACs) <br> Universal Hashing Concepts, MD5, SHA <br> Collision-Resistant Hash Functions | — |
-| **8** | Security Considerations for Hash Functions (e.g., Birthday Attacks) <br> Introduction to Authenticated Encryption (Combining Confidentiality and Integrity) <br> Euler’s Theorem and Euler’s Totient Function (φ) | — |
-| **9** | Introduction to Public Key Cryptography <br> RSA Algorithm <br> Understanding Pretty Good Privacy (PGP) | — |
-| **10** | Introduction to Key Distribution Center (KDC) <br> Arithmetic Modulo Primes <br> One-Way Functions and Discrete Logarithm Problem (DLP) | — |
-| **11** | Diffie-Hellman Key Exchange <br> ElGamal Encryption <br> Introduction to Digital Signatures (Signing using RSA, Security of Signatures) | — |
-| **12** | Introduction to Elliptic Curve Cryptography (ECC) <br> Pairing-Based Cryptography & Security Analysis of ECC <br> ECDSA Algorithm | — |
-| **13** | Introduction to Post-Quantum Cryptography <br> Lattice-Based Cryptography, Isogenies and their Applications <br> Protocols for Identification and Login | — |
-| **14** | Zero-Knowledge Proofs <br> Authenticated Key Exchange <br> Introduction to Secure Multi-Party Computation | — |
-| **Adv.** | Overview of Authenticated Key Exchange and SSL/TLS Session Setup <br> Advanced Topics in Cryptography | — |
+The objectives of this course are to:
+
+1. Introduce the fundamental concepts, terminology, and principles of cryptography.
+2. Develop understanding of symmetric and asymmetric cryptographic algorithms.
+3. Explain mathematical foundations used in cryptography, including modular arithmetic, prime numbers, Euler’s theorem, and discrete logarithms.
+4. Analyze the security properties and vulnerabilities of cryptographic systems.
+5. Provide knowledge of modern cryptographic protocols, digital signatures, key exchange, and advanced cryptographic techniques.
 
 ---
 
-## 🛡️ 4. Information Security Learning Roadmap
+## 4. Course Learning Outcomes
 
-> **Instructor's Note:** *This is a definitive guide for anyone who wants to learn and jump into the information security field using a systematic academic approach. Take some time to learn the material and don't rush in. **Please, don't be evil, follow the law, and respect privacy.***
+After successful completion of this course, students should be able to:
 
-### 🧠 Mindset & Fundamentals
-*   [How to Become a Hacker](http://www.catb.org/esr/faqs/hacker-howto.html) - Classic guide explaining the hacker mindset and attitudes.
-*   [Deep Work: The 30-Hour Method](https://azeria-labs.com/the-importance-of-deep-work-the-30-hour-method-for-learning-a-new-skill/) - How to learn technical skills using focused, deliberate practice.
-*   [Paradox Of Choice](https://azeria-labs.com/paradox-of-choice/) - Avoiding overwhelm when too many cybersecurity resources are available.
-*   [Mastering A Skill](https://azeria-labs.com/the-process-of-mastering-a-skill/) - The process of moving from beginner to advanced technical ability.
+### CLO-1: Understand Cryptographic Foundations
+Explain the history, terminology, principles, and applications of cryptography.
 
-### ⚖️ Professionalism, Ethics & Law
-| Resource | Description |
+### CLO-2: Analyze Symmetric Cryptographic Systems
+Analyze stream ciphers, block ciphers, modes of operation, and classical symmetric algorithms such as DES, 3DES, IDEA, and AES.
+
+### CLO-3: Evaluate Security Mechanisms
+Evaluate cryptographic hash functions, message authentication codes, integrity mechanisms, and authenticated encryption schemes.
+
+### CLO-4: Apply Public-Key Cryptography
+Apply mathematical concepts to understand and analyze RSA, Diffie-Hellman, ElGamal, digital signatures, and elliptic curve cryptography.
+
+### CLO-5: Understand Advanced Cryptographic Protocols
+Describe modern and emerging cryptographic concepts, including post-quantum cryptography, zero-knowledge proofs, secure multi-party computation, and SSL/TLS protocols.
+
+---
+
+## 5. Course Modules
+
+### Module 1: Introduction to Cryptography
+- Overview and evolution of cryptography
+- Basic terminology and concepts
+- Sets and GCD
+- Importance and applications of cryptography
+- Kerckhoffs’s Principle
+
+### Module 2: Symmetric-Key Cryptography
+- Symmetric-key algorithms
+- Caesar cipher and key shifting
+- Chosen ciphertext attacks
+- Chosen plaintext attacks
+- Stream ciphers
+- Key stream generators
+- Security analysis of stream ciphers
+
+### Module 3: Block Ciphers and Modes of Operation
+- Introduction to block ciphers
+- Block cipher modes: ECB, CBC, CFB, OFB
+- Feistel cipher
+- DES and security analysis
+- 3DES and security analysis
+- IDEA and security analysis
+- AES and security analysis
+
+### Module 4: Message Integrity and Authentication
+- Introduction to message integrity
+- Techniques for ensuring integrity
+- Message Authentication Codes (MACs)
+- Universal hashing concepts
+- MD5 and SHA
+- Collision-resistant hash functions
+- Birthday attacks and hash security
+- Authenticated encryption
+- Combining confidentiality and integrity
+
+### Module 5: Mathematical Foundations for Public-Key Cryptography
+- Euler’s theorem
+- Euler’s totient function, φ
+- Arithmetic modulo primes
+- One-way functions
+- Discrete Logarithm Problem (DLP)
+- Key Distribution Center (KDC)
+
+### Module 6: Public-Key Cryptography
+- Introduction to public-key cryptography
+- RSA algorithm
+- Pretty Good Privacy (PGP)
+- Diffie-Hellman key exchange
+- ElGamal encryption
+- Digital signatures
+- RSA signing
+- Security of digital signatures
+
+### Module 7: Advanced Cryptographic Systems
+- Elliptic Curve Cryptography (ECC)
+- Pairing-based cryptography
+- Security analysis of ECC
+- ECDSA algorithm
+- Post-quantum cryptography
+- Lattice-based cryptography
+- Isogenies and their applications
+- Identification and login protocols
+
+### Module 8: Cryptographic Protocols and Emerging Topics
+- Zero-Knowledge Proofs
+- Authenticated key exchange
+- Secure Multi-Party Computation
+- SSL/TLS session setup
+- Advanced topics in cryptography
+
+---
+
+## 6. Weekly Course Plan
+
+| Week | Course Topics | CLO Mapping |
+|---|---|---|
+| Week 1 | Overview of cryptography and its evolution; basic terminology and concepts such as sets and GCD; importance and applications of cryptography; Kerckhoffs’s Principle | CLO-1, CLO-2 |
+| Week 2 | Symmetric-key algorithms; Caesar cipher and key shifting; chosen ciphertext attacks; chosen plaintext attacks | CLO-2 |
+| Week 3 | Introduction to stream ciphers; key stream generators; security analysis of stream ciphers | CLO-2 |
+| Week 4 | Introduction to block ciphers; block cipher modes of operation: ECB, CBC, CFB, OFB; Feistel cipher | CLO-2 |
+| Week 5 | DES: overview and security analysis; 3DES: overview and security analysis | CLO-2 |
+| Week 6 | IDEA: overview and security analysis; AES: overview and security analysis; introduction to message integrity; techniques for ensuring integrity | CLO-2, CLO-3 |
+| Week 7 | Message Authentication Codes (MACs); universal hashing concepts; MD5 and SHA; collision-resistant hash functions | CLO-3 |
+| Week 8 | Security considerations for hash functions, including birthday attack; introduction to authenticated encryption; combining confidentiality and integrity; Euler’s theorem and Euler’s totient function, φ | CLO-3, CLO-4 |
+| Week 9 | Introduction to public-key cryptography; RSA algorithm; Pretty Good Privacy (PGP) | CLO-4 |
+| Week 10 | Introduction to Key Distribution Center (KDC); arithmetic modulo primes; one-way functions; Discrete Logarithm Problem (DLP) | CLO-4 |
+| Week 11 | Diffie-Hellman key exchange; ElGamal encryption; introduction to digital signatures; signing using RSA; security of digital signatures | CLO-4 |
+| Week 12 | Introduction to Elliptic Curve Cryptography (ECC); pairing-based cryptography; security analysis of ECC; ECDSA algorithm | CLO-4, CLO-5 |
+| Week 13 | Introduction to post-quantum cryptography; lattice-based cryptography; isogenies and their applications; protocols for identification and login | CLO-5 |
+| Week 14 | Zero-Knowledge Proofs; authenticated key exchange; introduction to Secure Multi-Party Computation | CLO-5 |
+| Additional | Overview of authenticated key exchange and SSL/TLS session setup; advanced topics in cryptography | CLO-5 |
+
+---
+
+## 7. Mathematical Foundations Covered in the Course
+
+This course uses several mathematical concepts required for understanding cryptographic algorithms and protocols:
+
+| Mathematical Topic | Application in Cryptography |
 |---|---|
-| [ISSA Code of Ethics](https://www.issa.org/issa-code-of-ethics/) | Professional code of ethics from ISSA. |
-| [IEEE Code of Ethics](https://www.ieee.org/about/corporate/governance/p7-8.html) | Ethical principles for technology and engineering professionals. |
-| [Cyber Law Search](https://duckduckgo.com/?t=ffab&q=cyberlaw&ia=web) | Laws differ by country; always research local acts and enforcement before testing. |
-
-### 💻 Computer Science & Mathematics Foundations
-| Resource | Description |
-|---|---|
-| [CS50 (Harvard)](https://cs50.harvard.edu/x/2020/) | Introduction to the intellectual enterprises of computer science and the art of programming. |
-| [Intro to Computer Systems (CMU)](https://www.cs.cmu.edu/~213/schedule.html) | Basic concepts underlying all computer systems to make you a better programmer. |
-| [Discrete Mathematics (MIT OCW)](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-042j-mathematics-for-computer-science-fall-2010/) | Mathematics used in computing, logic, and proofs. |
-| [Statistics Cookbook](http://statistics.zone/) | The probability and statistics cookbook. |
-
-### 🐧 Operating Systems & Networking
-| Resource | Description |
-|---|---|
-| [Think OS](http://greenteapress.com/thinkos/thinkos.pdf) | A brief, accessible introduction to Operating Systems. |
-| [The Linux Command Line](http://linuxcommand.org/tlcl.php) | Great introduction to Linux CLI for beginners (Free PDF). |
-| [Linux Essentials (Hackersploit)](https://www.youtube.com/playlist?list=PLrA4KuHAnLOP7bzxgE4yMn1SRitEaZVBB) | Linux essentials for ethical hackers series. |
-| [Networking Concepts (Prof. Messer)](https://www.youtube.com/watch?v=M5c9HdaQqh0&list=PLG49S3nxzAnmpdmX7RoTOyuNJQAb-r-gd&t=0s) | CompTIA Network+ Training Course. |
-| [Computer Networking (CS144)](https://cs144.github.io/) | Academic introduction to computer networking. |
-| [Wireshark for Security Professionals](https://www.wiley.com/en-us/Wireshark+for+Security+Professionals%3A+Using+Wireshark+and+the+Metasploit+Framework-p-9781118918227) | Covers offensive and defensive packet analysis concepts. |
-
-### 🕸️ Web, Databases & Programming
-| Resource | Description |
-|---|---|
-| [Python for Everybody (Dr. Chuck)](https://www.youtube.com/watch?v=8DvywoWv6fI&t=1562s) | Full Python course for beginners. |
-| [C Programming (CS50)](https://www.youtube.com/watch?v=ix5jPkxsr7M) | C programming language from Harvard University. |
-| [SQL (CS50)](https://www.youtube.com/watch?v=TplT4qjz1RQ) | Database querying and management. |
-| [HTML / JS (Mozilla MDN)](https://developer.mozilla.org/en-US/docs/Learn) | The gold standard for web development documentation. |
+| Sets and GCD | Basic number theory for key exchange and modular systems |
+| Modular Arithmetic | Symmetric and public-key algorithms |
+| Prime Numbers | RSA, Diffie-Hellman, discrete logarithm systems |
+| Euler’s Theorem | RSA and modular exponentiation concepts |
+| Euler’s Totient Function | RSA key generation and analysis |
+| One-Way Functions | Public-key cryptography foundations |
+| Discrete Logarithm Problem | Diffie-Hellman, ElGamal, ECC |
+| Probability and Collision Analysis | Hash function security and birthday attacks |
 
 ---
 
-## 🎯 5. Advanced Tracks & Specializations
+## 8. Teaching Methodology
 
-Once fundamentals are secured, students should explore specialized domains:
+The course will be delivered using:
 
-### 🕵️ Ethical Hacking & Penetration Testing
-*   [Penetration Testing: A Hands-On Introduction](https://nostarch.com/pentesting) - By Georgia Weidman.
-*   [Kali Linux Revealed](https://kali.training/downloads/Kali-Linux-Revealed-1st-edition.pdf) - Free official training from Offensive Security.
-*   [Metasploit Unleashed](https://www.offensive-security.com/metasploit-unleashed/) - Free Metasploit course.
-*   [Buffer Overflow Made Easy](https://www.youtube.com/playlist?list=PLLKT__MCUeix3O0DPbmuaRuR_4Hxo4m3G) - By The Cyber Mentor.
-
-### 🌐 Web Application Security
-*   [Web Security Academy](https://portswigger.net/web-security) - Free, online web security training from the creators of Burp Suite.
-*   [CS253: Web Security (Stanford)](https://web.stanford.edu/class/cs253/) - Comprehensive overview of common web attacks and countermeasures.
-*   [PentesterLab](https://www.pentesterlab.com/) - Hands-on web hacking exercises.
-
-### 🔬 Reverse Engineering & Exploit Development
-*   [Reverse Engineering for Beginners](https://beginners.re/) - Free comprehensive PDF book.
-*   [ARM Assembly & Shellcode (Azeria Labs)](https://azeria-labs.com/writing-arm-assembly-part-1/) - Essential for mobile and IoT exploitation.
-*   [Windows Exploitation Pathway](https://fullpwnops.com/windows-exploitation-pathway.html) - From basics to advanced kernel exploitation.
-
-### 🦠 Malware Analysis & Digital Forensics
-*   [Malware Analyst’s Cookbook](https://www.wiley.com/en-us/Malware+Analyst%27s+Cookbook+and+DVD%3A+Tools+and+Techniques+for+Fighting+Malicious+Code-p-9781118008294) - A computer forensics "how-to" for fighting malicious code.
-*   [Practical Forensic Imaging](https://nostarch.com/forensicimaging) - Securing and managing digital evidence using Linux-based CLI tools.
-*   [MalTrak](https://maltrak.com/join) - Practical hands-on malware analysis training.
-
-### 📱 Mobile Hacking & OSINT
-*   [Mobile Hacking Crash Course](https://www.hacker101.com/sessions/mobile_crash_course) - By HackerOne.
-*   [Android App Reverse Engineering 101](https://maddiestone.github.io/AndroidAppRE/) - By Maddie Stone.
-*   [OSINT Framework](https://osintframework.com/) - Directory of free Open Source Intelligence gathering tools.
+- Lectures
+- Whiteboard/board-based mathematical derivations
+- Algorithm walkthroughs
+- Cryptographic example solving
+- Security analysis discussions
+- Assignments and problem sets
+- Optional implementation-based exercises
 
 ---
 
-## 🛠️ 6. Recommended Lab Setup
+## 9. Assessment
 
-To succeed in this course and the broader InfoSec field, students must build a safe, isolated lab environment.
+Assessment will be conducted as per department policy. Possible assessment components may include:
 
-1.  **Hypervisor:** VirtualBox or VMware Workstation Player.
-2.  **Attacker Machine:** Kali Linux or Parrot Security OS.
-3.  **Victim Machines:** Metasploitable 2, Windows 10/11 Evaluation VMs, OWASP Juice Shop, DVWA.
-4.  **Practice Platforms:** [TryHackMe](https://tryhackme.com/), [HackTheBox](https://www.hackthebox.com/), [PortSwigger Academy](https://portswigger.net/web-security).
+- Quizzes
+- Assignments
+- Midterm examination
+- Final examination
+- Course project or implementation exercise
+
+**Note:** Final assessment weightage will be announced by the instructor/department.
 
 ---
 
-## 📝 7. Document Control & Policies
+## 10. Recommended References
+
+The following books and resources are recommended for this course:
+
+1. William Stallings, *Cryptography and Network Security: Principles and Practice*
+2. Douglas R. Stinson, *Cryptography: Theory and Practice*
+3. Jonathan Katz and Yehuda Lindell, *Introduction to Modern Cryptography*
+4. Bruce Schneier, *Applied Cryptography*
+5. Dan Boneh and Victor Shoup, *A Graduate Course in Applied Cryptography*
+6. Cryptography-related lecture notes and standards from NIST, RFCs, and OWASP where applicable
+
+---
+
+## 11. Course Policies
+
+Students are expected to:
+
+- Attend lectures regularly
+- Complete assignments and problem sets on time
+- Follow academic integrity policies
+- Use cryptographic knowledge responsibly and legally
+- Respect privacy and institutional security policies
+
+---
+
+## 12. Document Control
 
 | Field | Details |
 |---|---|
-| **Version** | Fall 2024 / Spring 2026 |
-| **Revision Date** | 1-2024 |
-| **Instructor** | Engr.
+| Version | Fall 2024 |
+| Revision Date | 1-2024 |
+| Instructor | Engr. Muhammad Ahmad Nawaz |
+| Instructor Signature | __________________ |
